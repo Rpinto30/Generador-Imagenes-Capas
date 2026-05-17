@@ -10,7 +10,7 @@
 
 namespace dotGenerator{
     using namespace std;
-    using namespace structures;
+    using namespace st;
 
     class SubGraph{
         private:
@@ -109,7 +109,7 @@ namespace dotGenerator{
     };
 
 
-    // voy a hacer una linkedList de subgraphs, para poder tener una lista de los subgraphs de mi dotFile (est� el diagrama que hice)
+    //LISTA DE SUBGRAPHS (ESTRUCTURA DE APOYO)
     typedef Node<SubGraph> SubGraphNode;
 
     class SubgraphQueue : private LinkedList<SubGraph>{
@@ -167,8 +167,10 @@ namespace dotGenerator{
             }
 
             int generateFile(){
-                constructFile("graph.dot");
-                int result = system("dot -Tpng graph.dot -o output.png");
+                constructFile("graph"+tittle+".dot");
+
+                string result_str = "dot - Tpng graph" + tittle + ".dot -o output.png";
+                int result = system(result_str.c_str());
                 return result;
             }
 
@@ -176,15 +178,15 @@ namespace dotGenerator{
 
             SubgraphQueue* getQueue() {return &queue_subgraph;}
             void resetContext() {
-                context = "digraph MiniMarket {}";
+                context = "digraph "+tittle+" {}";
                 generateFile();
             }
 
             int updateSubGraphs(){
                 // rankdir=LR;
-                if (context != "digraph MiniMarket {\n\n" + queue_subgraph.getContexts() +"\n}")
+                if (context != "digraph "+tittle+" {\n\n" + queue_subgraph.getContexts() +"\n}")
                 {
-                     context = "digraph MiniMarket {\n\n" + queue_subgraph.getContexts() +"\n}";
+                     context = "digraph "+tittle+" {\n\n" + queue_subgraph.getContexts() +"\n}";
                      return 0;
                 }
                 return -1;

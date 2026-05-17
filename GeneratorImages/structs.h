@@ -28,11 +28,22 @@ typedef struct H_layer{
 template <typename T>
 struct Entity{
     T* data;
-    struct Entity* left;
-    struct Entity* right;
+    int id = 0;
+    struct Entity* left = nullptr;
+    struct Entity* right = nullptr;
 
-    Entity() : data(new T), left(nullptr), right(nullptr) {}
+    Entity(int id_, T* data) : data(data), left(nullptr), right(nullptr), id(id_) { }
+
+    ~Entity(){
+        delete data;
+    }
 };
+
+typedef struct User{
+    std::string name = "";
+    User(std::string name) : name(name) {}
+} User;
+
 
 
 class Layer{
@@ -211,15 +222,63 @@ class Layer{
     }
 
     ~Layer(){
-        // tengo que borrar recorriendo todos los nodos segun r,c
         clear_tree();
     }
 
 };
 
-
+template <typename T>
 class BTS{
+    private:
+    Entity<T>* root = nullptr;
 
+    Entity<T>* insert(Entity<T>* parent, int id, T* data){
+        if (parent == nullptr){
+            return new Entity<T>(id, data);
+        }
+
+        if (id < parent->id) parent->left = insert(parent->left, id, data);
+        if (id > parent->id) parent->right = insert(parent->right, id, data);
+
+        return parent;
+    }
+
+    //Uso PostOrden para que se elimine desde abajo hasta arriba, la cosa que se elimina de ultimo la raiz
+    void clear_postorden(Entity<T>* parent){
+        if (parent == nullptr) return;
+
+        clear_postorden(parent->left);
+        clear_postorden(parent->right);
+        delete parent;
+    }
+
+    void f_preOrden(Entity<T>* parent){
+        if (parent == nullptr) return;
+
+        if (parent->left || parent->right) std::cout<<std::endl<<parent->id<<std::endl;
+        if (parent->left) std::cout<<" Izq: "<<parent->left->id<<" ";
+        if (parent->right) std::cout<<" Der: "<<parent->right->id<<" ";
+        f_preOrden(parent->left);
+        f_preOrden(parent->right);
+    }
+
+    public:
+    void insert(int id, T* data){
+        root = insert(root, id, data);
+    }
+
+    void print_bts(){
+        if (root == nullptr){
+            std::cout<<"Nada que mostrar en el BST"<<std::endl;
+            return;
+        }
+        std::cout<<"En preornde:"<<std::endl;
+        f_preOrden(root);
+    }
+
+    ~BTS(){
+        clear_postorden(root);
+    }
 };
 
 
@@ -231,6 +290,95 @@ class QueueLayers{
 
 };
 
+
+    template <typename T>
+    struct Node{
+        int id = 0;
+        T* data;
+        std::string nameNode = "";
+        struct Node* next;
+
+        Node() : data(new T()) {}
+        //~Node() { delete data; }
+    };
+
+template<typename T>
+class LinkedList{
+    protected:
+        struct Node<T>* head = nullptr;
+
+        int checkList(){
+            if (head == nullptr) return 1;
+            return 0;
+        }
+
+        virtual void afterInsertAction(struct Node<T>* temp) {};
+
+        int insert(struct Node<T>* new_node){
+            if (checkList() == 1){
+                head = new_node;
+                head->next = nullptr;
+                return 0;
+            }
+            else{
+                struct Node<T>* temp = head;
+                while(temp->next != nullptr){
+                    temp = temp->next;
+                }
+
+                temp->next = new_node;
+                afterInsertAction(temp);
+                return 0;
+            }
+            return 1;
+        }
+
+        struct Node<T>* getByIndex(int index){
+            if (checkList() == 0){
+                struct Node<T>* temp = head;
+                while(temp != nullptr){
+                    if (temp->id == index){
+                        return temp;
+                    }
+                    temp = temp->next;
+                }
+            }
+            return nullptr;
+        }
+
+        struct Node<T>* getFirst(){
+            if (checkList() ==0 ){
+                return head;
+            }
+            return nullptr;
+        };
+
+        virtual void printData(struct Node<T>* node) {};
+
+        void showList(){
+            if (checkList() == 0){
+                struct Node<T>* temp = head;
+                while(temp != nullptr){
+                    printData(temp);
+                    temp = temp->next;
+                }
+            }
+        }
+
+    void clearList(){
+        struct Node<T>* temp;
+        while (head) {
+            temp = head;
+            head = head->next;
+            delete temp;
+        }
+    }
+
+        ~LinkedList(){
+            clearList();
+        }
+
+    };
 
 
 }
