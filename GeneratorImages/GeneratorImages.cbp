@@ -33,6 +33,7 @@
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Unit filename="DotGenerator.h" />
+		<Unit filename="definitions.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="structs.h" />
 		<Extensions>

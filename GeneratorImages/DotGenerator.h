@@ -15,19 +15,22 @@ namespace dotGenerator{
     class SubGraph{
         private:
         string tittle;
-        string context; //aca voy a colocar todo en un texto en conjunto, luego lo meto todo al dotfile
+        string context;
+        string color = "white";
 
         public:
+            //SubGraph(string color): color(color) { }
+
             string getTittle() const {return tittle;}
             string getContext() const { return context;}
 
             void changeName(string new_name){
                 if (context == ""){
-                    context = "subgraph cluster_" + new_name +"{\nlabel=\""+ new_name +"\"\nstyle = \"filled,rounded\";\ncolor = lightgrey;\n";
+                    context = "subgraph cluster_" + new_name +"{\nlabel=\""+ new_name +"\"\nstyle = \"filled,rounded\"; ordering=out;\n";
                 } else{
                     int pos = context.find("{");
                     string context_wth_name = context.substr(pos+1);
-                    context = "subgraph cluster_" + new_name +"{\nlabel=\""+ new_name +"\"\nstyle = \"filled,rounded\";\ncolor = lightgrey;\n" + context_wth_name;
+                    context = "subgraph cluster_" + new_name +"{\nlabel=\""+ new_name +"\"\nstyle = \"filled,rounded\";\ncolor = "+color+";\n" + context_wth_name;
                 }
                 tittle = new_name;
 
@@ -37,14 +40,28 @@ namespace dotGenerator{
                 if (context == ""){
                     changeName("na");
                 }
-                context += name + "[label=\"" + name +"\", shape=record, style=filled, fillcolor=white];\n";
+                context += name + "[label=\"" + name +"\", shape=box, style=filled, fillcolor="+color+"];\n";
+            }
+
+            void setInsameRank(string nodes[], int size){
+                if (context == ""){
+                    changeName("na");
+                }
+
+                string rank_ = "\n{ rank=same; ";
+                for (int i = 0; i < size; i++) {
+                    rank_ += " " + nodes[i] + ";";
+                }
+
+                context += rank_ + " }\n";
+
             }
 
             void insertNode(string name, string label){
                 if (context == ""){
                     changeName("na");
                 }
-                context +=  name + "[label=\"" + label +"\", shape=record, style=filled, fillcolor=white];\n";
+                context +=  name + "[label=\"" + label +"\", shape=record, style=filled, fillcolor="+color+"];\n";
             }
 
             void simpleConnectNode(string nodeA, string nodeB){
@@ -154,6 +171,7 @@ namespace dotGenerator{
     class DotFile{
         private:
             string tittle;
+            string output_file_tittle;
             string context;
             SubgraphQueue queue_subgraph;
 
@@ -164,17 +182,21 @@ namespace dotGenerator{
 
                 outFile << context;
                 outFile.close();
+                cout<<"Archivo: "<<filename<<"creado"<<endl;
             }
 
             int generateFile(){
                 constructFile("graph"+tittle+".dot");
 
-                string result_str = "dot - Tpng graph" + tittle + ".dot -o output.png";
+                string result_str = "dot -Tpng graph" + tittle + ".dot -o output.png";
+                cout<<result_str<<endl;
                 int result = system(result_str.c_str());
                 return result;
             }
 
         public:
+
+            DotFile(string tittle, string output_file_tittle): tittle(tittle), output_file_tittle(output_file_tittle) {}
 
             SubgraphQueue* getQueue() {return &queue_subgraph;}
             void resetContext() {

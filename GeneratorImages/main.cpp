@@ -1,15 +1,41 @@
 #include <iostream>
 #include "structs.h"
 #include "DotGenerator.h"
+#include "definitions.h"
 
 using namespace std;
-using namespace st;
+using namespace definitions;
 using namespace dotGenerator;
 
-DotFile dot_file;
 
-void graphIntoDotFile(){ // Este metodo me ayuda a insertar todos los subgraphs de las EDD que voy a querer visualizar
+
+BST<User> bt("Usuarios", "usr_", "black");
+DotFile dot_file("User_ex", "us_ej");
+
+/*REFERENCIA A FUNCIONES*/
+void graphIntoDotFile();
+int generateDot(bool debugMessage);
+
+int main()
+{
+    graphIntoDotFile();
+    bt.insert(10 , new User("pene"));
+    bt.insert(15 , new User("pene"));
+    bt.insert(5 , new User("pene"));
+    bt.insert(3 , new User("pene"));
+    bt.insert(12 , new User("pene"));
+    bt.insert(8 , new User("pene"));
+    bt.insert(17, new User("pene"));
+    bt.insert(16, new User("pene"));
+    bt.preOrden_graphviz();
+    bt.print_preorden();
+    generateDot(true);
+    return 0;
+}
+
+void graphIntoDotFile(){
     SubgraphQueue* dot_queue = dot_file.getQueue();
+    dot_queue->add(bt.getGraph());
 }
 
 int generateDot(bool debugMessage = false){
@@ -24,27 +50,6 @@ int generateDot(bool debugMessage = false){
         if(debugMessage) cout<<" x Error al crear el .dot"<<endl;
         return -1;
     }
-}
-
-int main()
-{
-    BST<User> bt;
-    bt.insert(10 , new User("pene"));
-    bt.insert(15 , new User("pene"));
-    bt.insert(5 , new User("pene"));
-    bt.insert(3 , new User("pene"));
-    bt.insert(12 , new User("pene"));
-    bt.insert(8 , new User("pene"));
-    bt.insert(17, new User("pene"));
-
-    bt.print_bts();
-    bt.print_bsf();
-
-    // graphIntoDotFile();
-    // generateDot();
-
-
-    return 0;
 }
 
 
