@@ -53,14 +53,13 @@ class Layer{
     H_layer* colH;
 
     H_layer* getOrCreateHeader(H_layer* &root, int idx) {
-        if (!root || idx < root->index) { //Sin punto de inicio o index de inserción es el menor (Headers)
+        if (!root || idx < root->index) {
             H_layer* newHeader = new H_layer(idx);
             newHeader->next = root;
             root = newHeader;
             return root;
         }
 
-        // LinkedList moment
         H_layer* aux = root;
         while(aux->next && aux->next->index <= idx) {
             aux = aux->next;
@@ -77,7 +76,6 @@ class Layer{
     Layer() : rowH(nullptr), colH(nullptr) {}
 
     void remove(int r, int c){
-        // ENCABEZADOS
         H_layer* rh = rowH;
         while(rh && rh->index < r){
             rh = rh->next;
@@ -89,7 +87,6 @@ class Layer{
 
         if (!rh || !ch) return;
 
-        // ENCONTRAR REFERENCIAS TANTO EN rh como en ch
         Pixel* target = nullptr;
         Pixel* prev = nullptr;
         Pixel* temp = rh->first;
@@ -127,35 +124,32 @@ class Layer{
         H_layer* rh = getOrCreateHeader(rowH, r);
         H_layer* ch = getOrCreateHeader(colH, c);
 
-        // Buscar existencias
         Pixel* existing = search(r, c);
         if (existing){
             existing->color = hex;
             return;
         }
 
-        // Creacion nuevos pixeles
         Pixel* new_pixel = new Pixel(r, c, hex);
 
-        // Fila (row)
         if (!rh->first || rh->first->column > c){
             new_pixel->right = rh->first;
             rh->first = new_pixel;
         } else{
             Pixel* temp = rh->first;
-            while(temp->right && temp->right->column < r){
+            while(temp->right && temp->right->column < c){
                 temp = temp->right;
             }
             new_pixel->right = temp->right;
             temp->right = new_pixel;
         }
-         // Columna (column)
+
         if (!ch->first || ch->first->row > r){
             new_pixel->down = ch->first;
             ch->first = new_pixel;
         } else{
             Pixel* temp = ch->first;
-            while(temp->down && temp->down->row < c){
+            while(temp->down && temp->down->row < r){
                 temp = temp->down;
             }
             new_pixel->down = temp->down;
@@ -193,10 +187,9 @@ class Layer{
         }
 
         H_layer* currCol = colH;
-        if (currCol == nullptr) return;
         while(currCol != nullptr){
             H_layer* temp_col = currCol->next;
-            delete temp_col;
+            delete currCol;
             currCol = temp_col;
         }
 
@@ -228,78 +221,21 @@ class Layer{
 };
 
 template <typename T>
-class BTS{
-    private:
-    Entity<T>* root = nullptr;
-
-    Entity<T>* insert(Entity<T>* parent, int id, T* data){
-        if (parent == nullptr){
-            return new Entity<T>(id, data);
-        }
-
-        if (id < parent->id) parent->left = insert(parent->left, id, data);
-        if (id > parent->id) parent->right = insert(parent->right, id, data);
-
-        return parent;
-    }
-
-    //Uso PostOrden para que se elimine desde abajo hasta arriba, la cosa que se elimina de ultimo la raiz
-    void clear_postorden(Entity<T>* parent){
-        if (parent == nullptr) return;
-
-        clear_postorden(parent->left);
-        clear_postorden(parent->right);
-        delete parent;
-    }
-
-    void f_preOrden(Entity<T>* parent){
-        if (parent == nullptr) return;
-
-        if (parent->left || parent->right) std::cout<<std::endl<<parent->id<<std::endl;
-        if (parent->left) std::cout<<" Izq: "<<parent->left->id<<" ";
-        if (parent->right) std::cout<<" Der: "<<parent->right->id<<" ";
-        f_preOrden(parent->left);
-        f_preOrden(parent->right);
-    }
-
-    public:
-    void insert(int id, T* data){
-        root = insert(root, id, data);
-    }
-
-    void print_bts(){
-        if (root == nullptr){
-            std::cout<<"Nada que mostrar en el BST"<<std::endl;
-            return;
-        }
-        std::cout<<"En preornde:"<<std::endl;
-        f_preOrden(root);
-    }
-
-    ~BTS(){
-        clear_postorden(root);
-    }
-};
-
-
-class ListImages{
-
-};
-
-class QueueLayers{
-
-};
-
-
-    template <typename T>
     struct Node{
         int id = 0;
         T* data;
         std::string nameNode = "";
         struct Node* next;
 
-        Node() : data(new T()) {}
-        //~Node() { delete data; }
+        Node(T* data, bool owns = true) : data(data), owns_data(owns), next(nullptr) {}
+        Node() : data(new T()), owns_data(true), next(nullptr) {}
+
+        ~Node() {
+            if (owns_data) delete data;
+        }
+
+        private:
+            bool owns_data;
     };
 
 template<typename T>
@@ -380,6 +316,139 @@ class LinkedList{
 
     };
 
+    template <typename T>
+    class Queue : protected LinkedList<T>{
+        using LinkedList<T>::head;
+
+        public:
+            struct Node<T>* back(){
+                struct Node<T>* temp = head;
+                while(temp->next != nullptr){
+                    temp = temp->next;
+                }
+                return temp;
+            }
+
+            struct Node<T>* peek(){
+                return head;
+            }
+
+            struct Node<T>* dequeue(){
+                if (head == nullptr) return nullptr;
+
+                struct Node<T>* temp = head;
+                head = head->next;
+                temp->next = nullptr;
+                return temp;
+            }
+
+            bool isEmpty(){
+                if (head == nullptr) return true;
+                else return false;
+            }
+
+            void enqueue(T* data, bool owns = true){
+                Node<T>* node = new Node<T>(data, owns);
+                this->insert(node);
+            }
+    };
+
+
+template <typename T>
+class BTS{
+    private:
+    Entity<T>* root = nullptr;
+
+    Entity<T>* insert(Entity<T>* parent, int id, T* data){
+        if (parent == nullptr){
+            return new Entity<T>(id, data);
+        }
+
+        if (id < parent->id) parent->left = insert(parent->left, id, data);
+        if (id > parent->id) parent->right = insert(parent->right, id, data);
+
+        return parent;
+    }
+
+    void clear_postorden(Entity<T>* parent){
+        if (parent == nullptr) return;
+
+        clear_postorden(parent->left);
+        clear_postorden(parent->right);
+        delete parent;
+    }
+
+    void f_preOrden(Entity<T>* parent){
+        if (parent == nullptr) return;
+
+        if (parent->left || parent->right) std::cout<<std::endl<<parent->id<<std::endl;
+        if (parent->left) std::cout<<" Izq: "<<parent->left->id<<" ";
+        if (parent->right) std::cout<<" Der: "<<parent->right->id<<" ";
+        f_preOrden(parent->left);
+        f_preOrden(parent->right);
+    }
+
+    int height(Entity<T>* parent){
+        if (!parent) return 0;
+
+        int h_left = height(parent->left);
+        int h_right = height(parent->right);
+
+        return std::max(h_left, h_right) + 1;
+    }
+
+    void BSF(){
+        Queue<Entity<T>> queue_;
+        queue_.enqueue(root, false);
+        while (!queue_.isEmpty()){
+            Node<Entity<T>>* temp = queue_.dequeue();
+
+            std::cout<<" "<<temp->data->id<<" ";
+            std::cout<<"Height: "<<height(temp->data);
+
+            if (temp->data->left) queue_.enqueue(temp->data->left, false);
+            if (temp->data->right) queue_.enqueue(temp->data->right, false);
+
+            delete temp;
+        }
+    }
+
+    public:
+    void insert(int id, T* data){
+        root = insert(root, id, data);
+    }
+
+    void print_bts(){
+        if (root == nullptr){
+            std::cout<<"Nada que mostrar en el BST"<<std::endl;
+            return;
+        }
+        std::cout<<"En preornde:"<<std::endl;
+        f_preOrden(root);
+    }
+
+    void print_bsf(){
+        if (root == nullptr){
+            std::cout<<"Nada que mostrar en el BST"<<std::endl;
+            return;
+        }
+        std::cout<<"En BSF:"<<std::endl;
+        BSF();
+    }
+
+    ~BTS(){
+        clear_postorden(root);
+    }
+};
+
+
+class ListImages{
+
+};
+
+class QueueLayers{
+
+};
 
 }
 

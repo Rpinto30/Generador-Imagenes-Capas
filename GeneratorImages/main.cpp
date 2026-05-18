@@ -38,9 +38,10 @@ int main()
     bt.insert(17, new User("pene"));
 
     bt.print_bts();
+    bt.print_bsf();
 
-    graphIntoDotFile();
-    generateDot();
+    // graphIntoDotFile();
+    // generateDot();
 
 
     return 0;
