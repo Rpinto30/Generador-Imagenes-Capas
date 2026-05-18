@@ -45,6 +45,23 @@ typedef struct User{
 } User;
 
 
+template <typename T>
+    struct Node{
+        int id = 0;
+        T* data;
+        std::string nameNode = "";
+        struct Node* next;
+
+        Node(T* data, bool owns = true) : data(data), owns_data(owns), next(nullptr) {}
+        Node() : data(new T()), owns_data(true), next(nullptr) {}
+
+        ~Node() {
+            if (owns_data) delete data;
+        }
+
+        private:
+            bool owns_data;
+    };
 
 class Layer{
     private:
@@ -220,24 +237,6 @@ class Layer{
 
 };
 
-template <typename T>
-    struct Node{
-        int id = 0;
-        T* data;
-        std::string nameNode = "";
-        struct Node* next;
-
-        Node(T* data, bool owns = true) : data(data), owns_data(owns), next(nullptr) {}
-        Node() : data(new T()), owns_data(true), next(nullptr) {}
-
-        ~Node() {
-            if (owns_data) delete data;
-        }
-
-        private:
-            bool owns_data;
-    };
-
 template<typename T>
 class LinkedList{
     protected:
@@ -310,9 +309,36 @@ class LinkedList{
         }
     }
 
+
+    public:
         ~LinkedList(){
             clearList();
         }
+
+
+        T** to_array(){
+            int size = 0;
+            Node<T>* temp = head;
+
+            while (temp != nullptr){
+                size++;
+                temp = temp->next;
+            }
+
+            if (size == 0) return nullptr;
+
+            T** arr = new T*[size];
+
+            temp = head;
+
+            for (int i = 0; i < size; i++){
+                arr[i] = temp->data;
+                temp = temp->next;
+            }
+
+            return arr;
+        }
+
 
     };
 
@@ -351,11 +377,15 @@ class LinkedList{
                 Node<T>* node = new Node<T>(data, owns);
                 this->insert(node);
             }
+
+            T* to_array(){
+                return this->to_array();
+            }
     };
 
 
 template <typename T>
-class BTS{
+class BST{
     private:
     Entity<T>* root = nullptr;
 
@@ -400,9 +430,9 @@ class BTS{
     void BSF(){
         Queue<Entity<T>> queue_;
         queue_.enqueue(root, false);
+        int position_arr = 0;
         while (!queue_.isEmpty()){
             Node<Entity<T>>* temp = queue_.dequeue();
-
             std::cout<<" "<<temp->data->id<<" ";
             std::cout<<"Height: "<<height(temp->data);
 
@@ -436,18 +466,9 @@ class BTS{
         BSF();
     }
 
-    ~BTS(){
+    ~BST(){
         clear_postorden(root);
     }
-};
-
-
-class ListImages{
-
-};
-
-class QueueLayers{
-
 };
 
 }

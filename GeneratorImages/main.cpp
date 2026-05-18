@@ -28,7 +28,7 @@ int generateDot(bool debugMessage = false){
 
 int main()
 {
-    BTS<User> bt;
+    BST<User> bt;
     bt.insert(10 , new User("pene"));
     bt.insert(15 , new User("pene"));
     bt.insert(5 , new User("pene"));
