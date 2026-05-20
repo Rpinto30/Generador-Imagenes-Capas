@@ -19,10 +19,11 @@ namespace dotGenerator{
         string color = "white";
 
         public:
-            //SubGraph(string color): color(color) { }
-
             string getTittle() const {return tittle;}
             string getContext() const { return context;}
+            void setColor(string col) {
+                this->color = col;
+            }
 
             void changeName(string new_name){
                 if (context == ""){
@@ -41,6 +42,19 @@ namespace dotGenerator{
                     changeName("na");
                 }
                 context += name + "[label=\"" + name +"\", shape=box, style=filled, fillcolor="+color+"];\n";
+            }
+
+            void clearAllConections(){
+                stringstream separator(context);
+                string temp;
+                string new_context;
+
+                while (getline(separator, temp, '\n')){
+                    size_t position = temp.find("->");
+                    if (position != string::npos)  continue;
+                    new_context+=temp+"\n";
+                }
+                context = new_context;
             }
 
             void setInsameRank(string nodes[], int size){
@@ -65,7 +79,7 @@ namespace dotGenerator{
             }
 
             void simpleConnectNode(string nodeA, string nodeB){
-                context += nodeA + " -> " + nodeB +";\n";
+                context += nodeA + " -> " + nodeB +" [color="+color+"];\n";
             }
 
 
@@ -94,7 +108,7 @@ namespace dotGenerator{
                 while (getline(separator, temp, '\n')){
                     size_t pos = temp.find(nameNode+'[');
                     if (pos != string::npos){
-                        new_context+= nameNode + "[label=\"" + label +"\", shape=record, style=filled, fillcolor=white];\n";
+                        new_context+= nameNode + "[label=\"" + label +"\", shape=record, style=filled, fillcolor="+color+"];\n";
                         continue;
                     }
                     new_context+=temp+"\n";
@@ -173,6 +187,7 @@ namespace dotGenerator{
             string tittle;
             string output_file_tittle;
             string context;
+            string config;
             SubgraphQueue queue_subgraph;
 
             void constructFile(const string filename) {
@@ -197,6 +212,7 @@ namespace dotGenerator{
         public:
 
             DotFile(string tittle, string output_file_tittle): tittle(tittle), output_file_tittle(output_file_tittle) {}
+            DotFile(string tittle, string output_file_tittle, string config): tittle(tittle), output_file_tittle(output_file_tittle), config(config) {}
 
             SubgraphQueue* getQueue() {return &queue_subgraph;}
             void resetContext() {
@@ -206,9 +222,9 @@ namespace dotGenerator{
 
             int updateSubGraphs(){
                 // rankdir=LR;
-                if (context != "digraph "+tittle+" {\n\n" + queue_subgraph.getContexts() +"\n}")
+                if (context != "digraph "+tittle+" {\nlabel="+tittle+config +queue_subgraph.getContexts() +"\n}")
                 {
-                     context = "digraph "+tittle+" {\n\n" + queue_subgraph.getContexts() +"\n}";
+                     context = "digraph "+tittle+" {\nlabel="+tittle+config + queue_subgraph.getContexts() +"\n}";
                      return 0;
                 }
                 return -1;

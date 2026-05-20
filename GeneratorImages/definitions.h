@@ -10,7 +10,7 @@ using namespace st;
 
 namespace definitions{
 
-/*LAYERS*/
+/*----------------------------LAYERS----------------------------*/
 class Layer{
     private:
     int idLayer;
@@ -185,6 +185,17 @@ class Layer{
 
 };
 
+
+typedef struct Layer_struct{
+    int id = 0;
+    Layer* layer;
+
+    std::string name = "";
+    Layer_struct(std::string name, Layer* layer) : name(name), layer (layer) {}
+} Layer_struct;
+
+
+
 /*----------------------------BST----------------------------*/
 template <typename T>
 class BST{
@@ -212,19 +223,6 @@ class BST{
             graph.simpleConnectNode(parent_node, nodeRight);
             setConnectionsGraphviz(parent->right);
         }
-
-        //if (!parent || (!parent->left && !parent->right)) return;
-        /*std::string parent_node = tittle_nodes + std::to_string(parent->id);
-        if (parent->left)
-        {
-            std::string nodeLeft = tittle_nodes + std::to_string(parent->left->id);
-            graph.simpleConnectNode(parent_node, nodeLeft);
-        }
-        if (parent->right)
-        {
-          std::string nodeRight = tittle_nodes + std::to_string(parent->right->id);
-            graph.simpleConnectNode(parent_node, nodeRight);
-        }*/
     };
 
     Entity<T>* insert(Entity<T>* parent, int id, T* data){
@@ -236,8 +234,11 @@ class BST{
             return new_entity;
         }
 
-        if (id < parent->id) parent->left = insert(parent->left, id, data);
-        if (id > parent->id) parent->right = insert(parent->right, id, data);
+        if (id < parent->id)
+            parent->left = insert(parent->left, id, data);
+
+        if (id > parent->id)
+            parent->right = insert(parent->right, id, data);
         return parent;
     }
 
@@ -309,12 +310,14 @@ class BST{
 
     BST(string tittle, string tittle_nodes, string color_nodes) : tittle(tittle), tittle_nodes(tittle_nodes), color_nodes(color_nodes) {
         graph.changeName(tittle);
+        graph.setColor(color_nodes);
     }
 
     SubGraph * getGraph() { return &graph;}
 
     void insert(int id, T* data){
         root = insert(root, id, data);
+        preOrden_graphviz();
     }
 
     void print_preorden(){
@@ -336,6 +339,7 @@ class BST{
     }
 
     void preOrden_graphviz(){
+        graph.clearAllConections();
         setConnectionsGraphviz(root);
     }
 
@@ -344,6 +348,57 @@ class BST{
     }
 };
 
+typedef struct Image{
+    int id = 0;
+    string name = "";
+    LinkedList<Layer*> layers;
+    //Image(std::string name) :name(name) {}
+} Image;
+
+typedef BiNode<Image> ImageNode;
+
+class ListImages : private DoubleLinkedList<Image>{
+private:
+    int globalID = 0;
+    SubGraph graph;
+    string tittle;
+    string tittle_nodes;
+    string color_nodes;
+
+    ImageNode* createNode(int id,Image* data){
+        ImageNode * new_node = new ImageNode(data ,true);
+        new_node->id = id;
+        new_node->data->id = id;
+        new_node->next = nullptr;
+        new_node->prev = nullptr;
+
+        string nameNode = tittle_nodes +to_string(new_node->data->id);
+        new_node->nameNode = nameNode;
+        graph.insertNode(nameNode);
+        return new_node;
+    }
+
+    void afterInsertAction(ImageNode* temp) override{
+        if(temp->next != nullptr){
+            string nodeA = temp->nameNode;
+            string nodeB = temp->next->nameNode;
+            graph.simpleConnectNode(nodeA, nodeB);
+            graph.simpleConnectNode(nodeB, nodeA);
+        }
+    }
+public:
+    SubGraph * getGraph() { return &graph;}
+
+    ListImages (string tittle, string tittle_nodes, string color_nodes) : tittle(tittle), tittle_nodes(tittle_nodes), color_nodes(color_nodes) {
+        graph.changeName(tittle);
+        graph.setColor(color_nodes);
+    }
+
+    void add(int id, Image* data){
+        ImageNode* new_node = createNode(id, data);
+        insert(new_node);
+    }
+};
 
 }
 #endif

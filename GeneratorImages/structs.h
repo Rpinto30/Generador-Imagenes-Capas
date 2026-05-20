@@ -56,9 +56,9 @@ template <typename T>
         Node(T* data, bool owns = true) : data(data), owns_data(owns), next(nullptr) {}
         Node() : data(new T()), owns_data(true), next(nullptr) {}
 
-        ~Node() {
-            if (owns_data) delete data;
-        }
+       /* ~Node() {
+            if (owns_data && data) delete data;
+        }*/
 
         private:
             bool owns_data;
@@ -73,16 +73,15 @@ template <typename T>
         struct BiNode* prev;
 
          BiNode(T* data, bool owns = true) : data(data), owns_data(owns), next(nullptr), prev(nullptr) {}
-         BiNode() : data(new T()), next(nullptr), prev(nullptr) {} //generate their own data
-        ~BiNode() {
+         //BiNode() : data(new T()), next(nullptr), prev(nullptr) {} //generate their own data
+       /* ~BiNode() {
             if(owns_data) delete data;
-        }
+        }*/
 
          private:
             bool owns_data;
     };
 
-/*----------------------------LAYERS----------------------------*/
 
 /*----------------------------LINKEDLIST----------------------------*/
 template<typename T>
@@ -149,15 +148,12 @@ class LinkedList{
         }
 
     void clearList(){
-        /*struct Node<T>* temp = head;
-        while (temp->next) {
-            struct Node<T>* a = temp;
-            std::cout<<temp->id;
-            temp = temp->next;
-            //delete a;
+        struct Node<T>* temp;
+        while (head) {
+            temp = head;
+            head = head->next;
+            delete temp;
         }
-
-        delete head;*/
     }
 
 
@@ -314,6 +310,7 @@ class LinkedList{
 
         }
     };
+
 
 
 }

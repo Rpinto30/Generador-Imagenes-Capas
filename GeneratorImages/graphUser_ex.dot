@@ -1,23 +1,57 @@
 digraph User_ex {
-
+label=User_ex
+rankdir=TB; nodesep=0.5; ranksep=0.8; splines=ortho;
 subgraph cluster_Usuarios{
 label="Usuarios"
 style = "filled,rounded"; ordering=out;
-usr_10[label="usr_10", shape=box, style=filled, fillcolor=white];
-usr_15[label="usr_15", shape=box, style=filled, fillcolor=white];
-usr_5[label="usr_5", shape=box, style=filled, fillcolor=white];
-usr_3[label="usr_3", shape=box, style=filled, fillcolor=white];
-usr_12[label="usr_12", shape=box, style=filled, fillcolor=white];
-usr_8[label="usr_8", shape=box, style=filled, fillcolor=white];
-usr_17[label="usr_17", shape=box, style=filled, fillcolor=white];
-usr_16[label="usr_16", shape=box, style=filled, fillcolor=white];
-usr_10 -> usr_5;
-usr_5 -> usr_3;
-usr_5 -> usr_8;
-usr_10 -> usr_15;
-usr_15 -> usr_12;
-usr_15 -> usr_17;
-usr_17 -> usr_16;
+usr_10[label="usr_10", shape=box, style=filled, fillcolor=red];
+usr_15[label="usr_15", shape=box, style=filled, fillcolor=red];
+usr_5[label="usr_5", shape=box, style=filled, fillcolor=red];
+usr_3[label="usr_3", shape=box, style=filled, fillcolor=red];
+usr_12[label="usr_12", shape=box, style=filled, fillcolor=red];
+usr_8[label="usr_8", shape=box, style=filled, fillcolor=red];
+usr_17[label="usr_17", shape=box, style=filled, fillcolor=red];
+usr_16[label="usr_16", shape=box, style=filled, fillcolor=red];
+usr_10 -> usr_5 [color=red];
+usr_5 -> usr_3 [color=red];
+usr_5 -> usr_8 [color=red];
+usr_10 -> usr_15 [color=red];
+usr_15 -> usr_12 [color=red];
+usr_15 -> usr_17 [color=red];
+usr_17 -> usr_16 [color=red];
+
+}
+
+subgraph cluster_Imagenes{
+label="Imagenes"
+style = "filled,rounded"; ordering=out;
+img_1[label="img_1", shape=box, style=filled, fillcolor="#7FBA85"];
+img_2[label="img_2", shape=box, style=filled, fillcolor="#7FBA85"];
+img_1 -> img_2 [color="#7FBA85"];
+img_2 -> img_1 [color="#7FBA85"];
+img_4[label="img_4", shape=box, style=filled, fillcolor="#7FBA85"];
+img_2 -> img_4 [color="#7FBA85"];
+img_4 -> img_2 [color="#7FBA85"];
+img_5[label="img_5", shape=box, style=filled, fillcolor="#7FBA85"];
+img_4 -> img_5 [color="#7FBA85"];
+img_5 -> img_4 [color="#7FBA85"];
+
+}
+
+subgraph cluster_Capas{
+label="Capas"
+style = "filled,rounded"; ordering=out;
+lyr_10[label="lyr_10", shape=box, style=filled, fillcolor="#FF333340"];
+lyr_5[label="lyr_5", shape=box, style=filled, fillcolor="#FF333340"];
+lyr_4[label="lyr_4", shape=box, style=filled, fillcolor="#FF333340"];
+lyr_15[label="lyr_15", shape=box, style=filled, fillcolor="#FF333340"];
+lyr_9[label="lyr_9", shape=box, style=filled, fillcolor="#FF333340"];
+lyr_20[label="lyr_20", shape=box, style=filled, fillcolor="#FF333340"];
+lyr_10 -> lyr_5 [color="#FF333340"];
+lyr_5 -> lyr_4 [color="#FF333340"];
+lyr_5 -> lyr_9 [color="#FF333340"];
+lyr_10 -> lyr_15 [color="#FF333340"];
+lyr_15 -> lyr_20 [color="#FF333340"];
 
 }
 
