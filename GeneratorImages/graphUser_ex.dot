@@ -25,16 +25,21 @@ usr_17 -> usr_16 [color=red];
 subgraph cluster_Imagenes{
 label="Imagenes"
 style = "filled,rounded"; ordering=out;
-img_1[label="img_1", shape=box, style=filled, fillcolor="#7FBA85"];
-img_2[label="img_2", shape=box, style=filled, fillcolor="#7FBA85"];
-img_1 -> img_2 [color="#7FBA85"];
-img_2 -> img_1 [color="#7FBA85"];
-img_4[label="img_4", shape=box, style=filled, fillcolor="#7FBA85"];
-img_2 -> img_4 [color="#7FBA85"];
-img_4 -> img_2 [color="#7FBA85"];
-img_5[label="img_5", shape=box, style=filled, fillcolor="#7FBA85"];
-img_4 -> img_5 [color="#7FBA85"];
-img_5 -> img_4 [color="#7FBA85"];
+img_15[label="img_15", shape=box, style=filled, fillcolor="#7FBA85"];
+
+img_20[label="img_20", shape=box, style=filled, fillcolor="#7FBA85"];
+img_15 -> img_20 [color="#7FBA85"];
+img_20 -> img_15 [color="#7FBA85"];
+
+img_25[label="img_25", shape=box, style=filled, fillcolor="#7FBA85"];
+img_20 -> img_25 [color="#7FBA85"];
+img_25 -> img_20 [color="#7FBA85"];
+
+img_30[label="img_30", shape=box, style=filled, fillcolor="#7FBA85"];
+img_25 -> img_30 [color="#7FBA85"];
+img_30 -> img_25 [color="#7FBA85"];
+
+{rank=same;  img_15; img_20; img_25; img_30; }
 
 }
 

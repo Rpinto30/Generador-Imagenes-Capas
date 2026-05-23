@@ -1,0 +1,118 @@
+digraph GESTION_VISUAL_DE_MEMORIA {
+label=GESTION_VISUAL_DE_MEMORIA
+rankdir=TB; nodesep=0.5; ranksep=0.8; splines=ortho;
+subgraph cluster_Capas{
+label="Capas"
+style = "filled,rounded"; ordering=out;
+lyr_9[label="lyr_9", shape=box, style=filled, fillcolor="#FF333340"];
+lyr_2[label="lyr_2", shape=box, style=filled, fillcolor="#FF333340"];
+lyr_5[label="lyr_5", shape=box, style=filled, fillcolor="#FF333340"];
+lyr_11[label="lyr_11", shape=box, style=filled, fillcolor="#FF333340"];
+lyr_1[label="lyr_1", shape=box, style=filled, fillcolor="#FF333340"];
+lyr_55[label="lyr_55", shape=box, style=filled, fillcolor="#FF333340"];
+lyr_10[label="lyr_10", shape=box, style=filled, fillcolor="#FF333340"];
+lyr_9 -> lyr_2 [color="#FF333340"];
+lyr_2 -> lyr_1 [color="#FF333340"];
+lyr_2 -> lyr_5 [color="#FF333340"];
+lyr_9 -> lyr_11 [color="#FF333340"];
+lyr_11 -> lyr_10 [color="#FF333340"];
+lyr_11 -> lyr_55 [color="#FF333340"];
+
+}
+
+subgraph cluster_Imagenes{
+label="Imagenes"
+style = "filled,rounded"; ordering=out;
+img_15[label="img_15", shape=box, style=filled, fillcolor="#7FBA85"];
+
+img_20[label="img_20", shape=box, style=filled, fillcolor="#7FBA85"];
+img_15 -> img_20 [color="#7FBA85"];
+img_20 -> img_15 [color="#7FBA85"];
+
+img_25[label="img_25", shape=box, style=filled, fillcolor="#7FBA85"];
+img_20 -> img_25 [color="#7FBA85"];
+img_25 -> img_20 [color="#7FBA85"];
+
+img_30[label="img_30", shape=box, style=filled, fillcolor="#7FBA85"];
+img_25 -> img_30 [color="#7FBA85"];
+img_30 -> img_25 [color="#7FBA85"];
+
+{rank=same;  img_15; img_20; img_25; img_30; }
+img_20 -> i20_lyr_11 [color="#7FBA85"];
+i20_lyr_11[label="i20_lyr_11", shape=box, style=filled, fillcolor="#7FBA85"];
+i20_lyr_11 -> lyr_11 [color="#7FBA85"];
+i20_lyr_11 -> i20_lyr_2 [color="#7FBA85"];
+i20_lyr_2[label="i20_lyr_2", shape=box, style=filled, fillcolor="#7FBA85"];
+i20_lyr_2 -> lyr_2 [color="#7FBA85"];
+img_15 -> i15_lyr_5 [color="#7FBA85"];
+i15_lyr_5[label="i15_lyr_5", shape=box, style=filled, fillcolor="#7FBA85"];
+i15_lyr_5 -> lyr_5 [color="#7FBA85"];
+i20_lyr_2 -> i20_lyr_10 [color="#7FBA85"];
+i20_lyr_10[label="i20_lyr_10", shape=box, style=filled, fillcolor="#7FBA85"];
+i20_lyr_10 -> lyr_10 [color="#7FBA85"];
+
+}
+
+subgraph cluster_Usuarios{
+label="Usuarios"
+style = "filled,rounded"; ordering=out;
+us_10[label="us_10", shape=box, style=filled, fillcolor=red];
+us_5[label="us_5", shape=box, style=filled, fillcolor=red];
+us_6[label="us_6", shape=box, style=filled, fillcolor=red];
+us_10 -> us_5 [color=red];
+us_5 -> us_6 [color=red];
+us_10_img15[label="us_10_img15"shape=record, style=filled, fillcolor="#7F008F"];
+us_10 -> us_10_img15 [color=red, style=dashed];
+us_10_img15 -> img_15 [color=red, style=dashed];
+us_10_img25[label="us_10_img25"shape=record, style=filled, fillcolor="#7F008F"];
+us_10_img15 -> us_10_img25 [color=red, style=dashed];
+us_10_img25 -> img_25 [color=red, style=dashed];
+us_5_img25[label="us_5_img25"shape=record, style=filled, fillcolor="#7F008F"];
+us_5 -> us_5_img25 [color=red, style=dashed];
+us_5_img25 -> img_25 [color=red, style=dashed];
+
+}
+
+subgraph cluster_l1{
+label="l1"
+style = "filled,rounded"; ordering=out;
+root[label="root", shape=box, style=filled, fillcolor=white];
+row_1[label="row_1", shape=box, style=filled, fillcolor=white];
+root -> row_1 [color=white, style=dashed];
+col_1[label="col_1", shape=box, style=filled, fillcolor=white];
+root -> col_1 [color=white, style=dashed];
+p_11[label="#asdqwe", shape=box, style=filled, fillcolor=white];
+col_1 -> p_11 [color=white, constraint=false];
+row_1 -> p_11 [color=white, constraint=false];
+row_2[label="row_2", shape=box, style=filled, fillcolor=white];
+row_1 -> row_2 [color=white, style=dashed, tailport=s, headport=n];
+col_4[label="col_4", shape=box, style=filled, fillcolor=white];
+
+{rank=same;  root; col_1; col_4; }
+p_42[label="#zxcasd", shape=box, style=filled, fillcolor=white];
+col_4 -> p_42 [color=white, constraint=false];
+row_2 -> p_42 [color=white, constraint=false];
+row_3[label="row_3", shape=box, style=filled, fillcolor=white];
+row_2 -> row_3 [color=white, style=dashed, tailport=s, headport=n];
+col_5[label="col_5", shape=box, style=filled, fillcolor=white];
+
+{rank=same;  root; col_1; col_4; col_5; }
+p_53[label="#cvbdfg", shape=box, style=filled, fillcolor=white];
+col_5 -> p_53 [color=white, constraint=false];
+row_3 -> p_53 [color=white, constraint=false];
+row_6[label="row_6", shape=box, style=filled, fillcolor=white];
+row_3 -> row_6 [color=white, style=dashed, tailport=s, headport=n];
+col_6[label="col_6", shape=box, style=filled, fillcolor=white];
+col_1 -> col_4 [color=white, style=dashed, tailport=e, headport=w];
+col_4 -> col_5 [color=white, style=dashed, tailport=e, headport=w];
+col_5 -> col_6 [color=white, style=dashed, tailport=e, headport=w];
+
+{rank=same;  root; col_1; col_4; col_5; col_6; }
+p_66[label="#345fdg", shape=box, style=filled, fillcolor=white];
+col_6 -> p_66 [color=white, constraint=false];
+row_6 -> p_66 [color=white, constraint=false];
+
+}
+
+
+}

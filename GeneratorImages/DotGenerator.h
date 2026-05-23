@@ -37,12 +37,31 @@ namespace dotGenerator{
 
             }
 
+            void insertInContext(string st_){
+                context+=st_;
+            }
+
             void insertNode(string name){
                 if (context == ""){
                     changeName("na");
                 }
                 context += name + "[label=\"" + name +"\", shape=box, style=filled, fillcolor="+color+"];\n";
             }
+
+            void insertNode(string name, string label){
+                if (context == ""){
+                    changeName("na");
+                }
+                context += name + "[label=\"" + label +"\", shape=box, style=filled, fillcolor="+color+"];\n";
+            }
+
+              void insertNode_extend(string name, string config){
+                if (context == ""){
+                    changeName("na");
+                }
+                context +=  name + "[label=\"" + name + "\"" + config + "];\n";
+            }
+
 
             void clearAllConections(){
                 stringstream separator(context);
@@ -57,29 +76,71 @@ namespace dotGenerator{
                 context = new_context;
             }
 
-            void setInsameRank(string nodes[], int size){
+             void removeKeyWord(string keyWord){
+                stringstream separator(context);
+                string temp;
+                string new_context;
+
+                while (getline(separator, temp, '\n')){
+                    size_t position = temp.find(keyWord);
+                    if (position != string::npos)  continue;
+                    new_context+=temp+"\n";
+                }
+                context = new_context;
+            }
+
+              void clearAllConections(string condition){
+                stringstream separator(context);
+                string temp;
+                string new_context;
+
+                while (getline(separator, temp, '\n')){
+                    size_t position = temp.find("->");
+                    size_t position_condition = temp.find(condition);
+                    if (position != string::npos && position_condition == string::npos) continue;
+                    new_context+=temp+"\n";
+                }
+                context = new_context;
+            }
+
+            void setInsameRank(string* nodes, int size){
                 if (context == ""){
                     changeName("na");
                 }
 
-                string rank_ = "\n{ rank=same; ";
+                string rank_ = "\n{rank=same; ";
                 for (int i = 0; i < size; i++) {
-                    rank_ += " " + nodes[i] + ";";
+                    rank_ += " " + *(nodes+i) + ";";
                 }
 
                 context += rank_ + " }\n";
 
             }
 
-            void insertNode(string name, string label){
-                if (context == ""){
-                    changeName("na");
+            void updateSameRank(string* nodes, int size){
+                stringstream separator(context);
+                string temp;
+                string new_context;
+
+                while (getline(separator, temp, '\n')){
+                    if (temp.find("{rank=same;") != string::npos) {continue;}
+                    else {new_context+=temp+"\n";}
                 }
-                context +=  name + "[label=\"" + label +"\", shape=record, style=filled, fillcolor="+color+"];\n";
+                context = new_context;
+
+                setInsameRank(nodes, size);
             }
 
             void simpleConnectNode(string nodeA, string nodeB){
                 context += nodeA + " -> " + nodeB +" [color="+color+"];\n";
+            }
+
+             void simpleConnectNode(string nodeA, string nodeB, string config){
+                context += nodeA + " -> " + nodeB +" [color="+color+", "+config+"];\n";
+            }
+
+              void simpleHorizontalConnectNode(string nodeA, string nodeB, string config){
+                context += nodeA + ":e -> " + nodeB +":o [color="+color+", "+config+"];\n";
             }
 
 
@@ -125,6 +186,18 @@ namespace dotGenerator{
 
                 while (getline(separator, temp, '\n')){
                     if (temp.find("->") != string::npos) {continue;}
+                    else {new_context+=temp+"\n";}
+                }
+                context = new_context;
+            }
+
+             void removeAllConections(string keep){
+                stringstream separator(context);
+                string temp;
+                string new_context;
+
+                while (getline(separator, temp, '\n')){
+                    if (temp.find("->") != string::npos && temp.find(keep) == string::npos) {continue;}
                     else {new_context+=temp+"\n";}
                 }
                 context = new_context;
@@ -197,14 +270,14 @@ namespace dotGenerator{
 
                 outFile << context;
                 outFile.close();
-                cout<<"Archivo: "<<filename<<"creado"<<endl;
+                //cout<<"Archivo: "<<filename<<"creado"<<endl;
             }
 
             int generateFile(){
                 constructFile("graph"+tittle+".dot");
 
                 string result_str = "dot -Tpng graph" + tittle + ".dot -o output.png";
-                cout<<result_str<<endl;
+                //cout<<result_str<<endl;
                 int result = system(result_str.c_str());
                 return result;
             }

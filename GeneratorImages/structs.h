@@ -9,6 +9,7 @@ namespace st{
     int row;
     int column;
     std::string color;
+    std::string nameNode;
     Pixel* right;
     Pixel* down;
 
@@ -19,6 +20,7 @@ typedef struct H_layer{
     int index;
     H_layer* next;
     Pixel* first;
+    std::string nameNode;
 
     H_layer(int i) : index(i), next(nullptr), first(nullptr) {}
 } H_layer;
@@ -28,9 +30,9 @@ typedef struct H_layer{
 template <typename T>
 struct Entity{
     T* data;
+    struct Entity* left = nullptr;
+    struct Entity* right = nullptr;
     int id;
-    struct Entity* left;
-    struct Entity* right;
 
     Entity(int id_, T* data) : data(data), left(nullptr), right(nullptr), id(id_) { }
 
@@ -39,11 +41,6 @@ struct Entity{
     }
 };
 
-typedef struct User{
-    int id = 0;
-    std::string name = "";
-    User(std::string name) : name(name) {}
-} User;
 
 
 template <typename T>
@@ -94,7 +91,7 @@ class LinkedList{
             return 0;
         }
 
-        virtual void afterInsertAction(struct Node<T>* temp) {};
+        virtual void afterInsertAction(Node<T>* temp) {};
 
         int insert(struct Node<T>* new_node){
             if (checkList() == 1){
@@ -110,6 +107,7 @@ class LinkedList{
 
                 temp->next = new_node;
                 afterInsertAction(temp);
+                std::cout<<"no se llama ptmadre";
                 return 0;
             }
             return 1;
@@ -162,6 +160,24 @@ class LinkedList{
             clearList();
         }
 
+        void insert_node(struct Node<T>* node){
+            insert(node);
+        }
+
+        bool isEmpty(){
+            if (head) return false;
+            else return true;
+        }
+
+        Node<T>* getLast(){
+            if (head == nullptr) return nullptr;
+
+            Node<T>* temp = head;
+            while(temp->next != nullptr){
+                temp = temp->next;
+            }
+            return temp;
+        }
 
         T** to_array(){
             int size = 0;
@@ -269,7 +285,7 @@ class LinkedList{
 
         struct BiNode<T>* getByIndex(int index){
             if (checkList() == 0){
-                struct Node<T>* temp = head;
+                struct BiNode<T>* temp = head;
                 while(temp != nullptr){
                     if (temp->id == index){
                         return temp;
@@ -299,7 +315,6 @@ class LinkedList{
             }
         }
 
-        //Lo del metodo desctructor lo investigue de: https://medium.com/@RobuRishabh/beginners-guide-to-linked-list-in-c-d8445ef906ab
         ~DoubleLinkedList(){
             struct BiNode<T>* temp;
             while (head) {
@@ -310,8 +325,6 @@ class LinkedList{
 
         }
     };
-
-
 
 }
 
