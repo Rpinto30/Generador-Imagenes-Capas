@@ -1,0 +1,28 @@
+graph resultPixelArt { 
+graph [splines=false]; 
+node [shape=square, width=1, height=1, fixedsize=true, margin=0, style=filled, fillcolor=white]; 
+edge [style=invis];subgraph l1{
+l1_24 [fillcolor="#FF0000", pos="2,4!"];
+l1_44 [fillcolor="#FF0000", pos="4,4!"];
+l1_13 [fillcolor="#FF0000", pos="1,3!"];
+l1_23 [fillcolor="#FF0000", pos="2,3!"];
+l1_33 [fillcolor="#FF0000", pos="3,3!"];
+l1_43 [fillcolor="#FF0000", pos="4,3!"];
+l1_53 [fillcolor="#FF0000", pos="5,3!"];
+l1_12 [fillcolor="#FF0000", pos="1,2!"];
+l1_22 [fillcolor="#FF0000", pos="2,2!"];
+l1_32 [fillcolor="#FF0000", pos="3,2!"];
+l1_42 [fillcolor="#FF0000", pos="4,2!"];
+l1_52 [fillcolor="#FF0000", pos="5,2!"];
+l1_21 [fillcolor="#FF0000", pos="2,1!"];
+l1_31 [fillcolor="#FF0000", pos="3,1!"];
+l1_41 [fillcolor="#FF0000", pos="4,1!"];
+l1_30 [fillcolor="#FF0000", pos="3,0!"];
+}subgraph l2{
+l2_14 [fillcolor="#FF00C8", pos="1,4!"];
+l2_23 [fillcolor="#A600FF", pos="2,3!"];
+l2_32 [fillcolor="#002AFF", pos="3,2!"];
+l2_41 [fillcolor="#00FBFF", pos="4,1!"];
+l2_50 [fillcolor="#FFEE00", pos="5,0!"];
+}
+}

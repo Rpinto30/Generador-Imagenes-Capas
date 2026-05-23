@@ -107,7 +107,6 @@ class LinkedList{
 
                 temp->next = new_node;
                 afterInsertAction(temp);
-                std::cout<<"no se llama ptmadre";
                 return 0;
             }
             return 1;

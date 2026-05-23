@@ -314,6 +314,64 @@ namespace dotGenerator{
     };
 
 
+    /*PIXEL ARTS*/
+    class PixelGraph{
+        private:
+            string tittle;
+            string output_file_tittle;
+            string context;
+            string config;
+            string subgraphs;
+
+            void constructFile(const string filename) {
+                ofstream outFile(filename);
+
+                if (!outFile) return;
+
+                outFile << context;
+                outFile.close();
+            }
+
+            int generateFile(){
+                constructFile("pixel_art_"+tittle+".dot");
+
+                string result_str = "dot -Kneato -Tpng pixel_art_" + tittle + ".dot -o result_"+tittle+".png";
+                int result = system(result_str.c_str());
+                return result;
+            }
+
+        public:
+
+            void resetContext() {
+                context = "digraph resultPixelArt {}";
+                generateFile();
+            }
+
+            void addToContext(string st){
+                subgraphs += st;
+            }
+
+            int updateSubGraphs(){
+                string context_header = "graph resultPixelArt { \ngraph [splines=false]; \nnode [shape=square, width=1, height=1, fixedsize=true, margin=0, style=filled, fillcolor=white]; \nedge [style=invis];";
+                if (context != context_header + subgraphs +"\n}")
+                {
+                     context = context_header + subgraphs +"\n}";
+                     return 0;
+                }
+                return -1;
+
+            }
+
+            int generateNewFiles(){
+                //queue_subgraph.print();
+
+                return (updateSubGraphs() == 0) ? generateFile() : 2;
+
+            }
+
+    };
+
+
 }
 
 #endif // DOT_GENERATOR

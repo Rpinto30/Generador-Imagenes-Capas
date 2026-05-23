@@ -31,14 +31,6 @@ int main()
     User* us3 = new User("us_6");
     bt.insert(6, us3);
 
-    /*bt.insert(15 , new User);
-    bt.insert(5 , new User);
-    bt.insert(3 , new User);
-    bt.insert(12 , new User);
-    bt.insert(8 , new User);
-    bt.insert(17, new User);*/
-    //bt.preOrden_graphviz();
-
     Layer* l1 = new Layer("l1");
     Layer* l2 = new Layer("l2");
     Layer* l3 = new Layer("l3");
@@ -46,11 +38,37 @@ int main()
     Layer* l5 = new Layer("l5");
     Layer* l6 = new Layer("l6");
     Layer* l7 = new Layer("l7");
+    //Crear archivo de imagen_memoria
     dot_file.getQueue()->add(l1->getGraph());
-    l1->insert(1, 1, "#asdqwe");
-    l1->insert(2, 4, "#zxcasd");
-    l1->insert(3, 5, "#cvbdfg");
-    l1->insert(6, 6, "#345fdg");
+    dot_file.getQueue()->add(l2->getGraph());
+
+    l1->insert(1, 2, "#FF0000");
+    l1->insert(1, 4, "#FF0000");
+    l1->insert(2, 1, "#FF0000");
+    l1->insert(2, 2, "#FF0000");
+    l1->insert(2, 3, "#FF0000");
+    l1->insert(2, 4, "#FF0000");
+    l1->insert(2, 5, "#FF0000");
+    l1->insert(3, 1, "#FF0000");
+    l1->insert(3, 2, "#FF0000");
+    l1->insert(3, 3, "#FF0000");
+    l1->insert(3, 4, "#FF0000");
+    l1->insert(3, 5, "#FF0000");
+    l1->insert(4, 2, "#FF0000");
+    l1->insert(4, 3, "#FF0000");
+    l1->insert(4, 4, "#FF0000");
+    l1->insert(5, 3, "#FF0000");
+    l1->pixelArt();
+
+    l2->insert(1, 1, "#FF00C8");
+    l2->insert(2,2, "#A600FF");
+    l2->insert(3,3, "#002AFF");
+    l2->insert(4,4, "#00FBFF");
+    l2->insert(5,5, "#FFEE00");
+    PixelGraph px_l1;
+    px_l1.addToContext(l1->pixelArt());
+    px_l1.addToContext(l2->pixelArt());
+    px_l1.generateNewFiles();
 
     bt_layers.insert(9, new Layer_struct(l1));
     bt_layers.insert(2, new Layer_struct(l2));

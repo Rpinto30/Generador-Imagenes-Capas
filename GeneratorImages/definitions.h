@@ -41,12 +41,10 @@ class Layer{
             hcol_names[0] = "root";
             int c = 1;
             while (temp){
-                cout<<endl<<temp->nameNode;
                 hcol_names[c] = temp->nameNode;
                 temp = temp->next;
                 c++;
             }
-            cout<<"coso:"<<endl;
             graph.setInsameRank(hcol_names, c);
         }
     }
@@ -60,31 +58,51 @@ class Layer{
         }
     }
 
-    string setRowRankGraphviz(H_layer* header){
-        string result= "same;"
-
-    }
-
-     void setHeaderGraphviz(H_layer* header, int type, H_layer* prev = nullptr)
+     void setHeaderGraphviz(H_layer* header, int type)
     {
-        graph.removeKeyWord("tailport=e, headport=w");
         header->nameNode = getType(type) +  to_string(header->index);
         graph.insertNode(header->nameNode);
-        if (prev){
-            if (type == 0)
-            setNewsConHCols();
-            else
-            graph.simpleConnectNode(prev->nameNode, header->nameNode, "style=dashed, tailport=s, headport=n");
+
+        if (type == 0) //conexion header ROWS
+        {
+            H_layer* temp_row = rowH;
+            if (temp_row != nullptr){
+                string id_con = "id=\"rowHeader\"";
+                graph.removeKeyWord(id_con);
+                graph.simpleConnectNode("root" , temp_row->nameNode, "style=dashed, " + id_con);
+                while (temp_row->next){
+                    graph.simpleConnectNode(temp_row->nameNode, temp_row->next->nameNode, "style=dashed, " + id_con);
+                    temp_row = temp_row->next;
+                }
+            }
         }
-        setSameRank(type);
+        else {//conexion header COLS y rank=same
+            H_layer* temp_col = colH;
+            if (temp_col != nullptr){
+                string id_con = "id=\"colHeader\"";
+                string result = "{rank=same; root; ";
+                graph.removeKeyWord(id_con);
+                graph.removeKeyWord("rank=same; root; col_");
+                graph.simpleConnectNode("root" , temp_col->nameNode, "style=dashed, " + id_con);
+                while (temp_col){
+                    result += temp_col->nameNode + "; ";
+                    if(temp_col->next)
+                    graph.simpleConnectNode(temp_col->nameNode, temp_col->next->nameNode, "style=dashed, " + id_con);
+                    temp_col = temp_col->next;
+                }
+                graph.insertInContext(result+ "}\n");
+            }
+        }//graph.simpleConnectNode(prev->nameNode, header->nameNode, "style=dashed, tailport=s, headport=n");
+
     }
 
     H_layer* getOrCreateHeader(H_layer* &root, int idx, int type) {
         if (!root || idx < root->index) {
             H_layer* newHeader = new H_layer(idx);
             newHeader->next = root;
-            setHeaderGraphviz(newHeader, type, root);
-            graph.simpleConnectNode("root", newHeader->nameNode, "style=dashed");
+            setHeaderGraphviz(newHeader, type);
+            //conexion header
+            //graph.simpleConnectNode("root", newHeader->nameNode, "style=dashed");
             root = newHeader;
 
             if (type == 0) sizeCols++;
@@ -97,14 +115,20 @@ class Layer{
             aux = aux->next;
         }
 
-        if(aux->index == idx) return aux;
+
+        if(aux->index == idx) {
+            setHeaderGraphviz(aux, type);
+            return aux;
+        }
 
         H_layer *newHeader = new H_layer(idx);
         newHeader->next = aux->next;
         aux->next = newHeader;
+
         if (type == 0) sizeCols++;
         else sizeRows++;
-        setHeaderGraphviz(newHeader, type, aux);
+        setHeaderGraphviz(newHeader, type);
+
         return newHeader;
     }
     public:
@@ -157,15 +181,51 @@ class Layer{
         delete target;
     }
 
-    //Se crea el actual y se conecta con el que ya está
-    void createInGraphviz(string name_prevCol, string name_prevRow, string name_actual, string pixel_color, bool isFirst = false){
-        string conf;
-        if (isFirst) conf = "constraint=false";
-        graph.insertNode(name_actual, pixel_color);
-        graph.simpleConnectNode(name_prevCol, name_actual, conf);
-        graph.simpleConnectNode(name_prevRow, name_actual, conf);
+    void setRowRankGraphviz(H_layer* header){
+        graph.removeKeyWord("rank=same; row_" + to_string(header->index));
+        string result= "rank=same; row_" + to_string(header->index) + "; ";
+        Pixel* temp = header->first;
+        while(temp){
+            result += temp->nameNode + "; ";
+            temp = temp->right;
+        }
+        graph.insertInContext("{"+result+"}");
     }
 
+
+    void createInGraphviz(H_layer* hCol, H_layer* hRow, Pixel* actual, string pixel_color){
+        graph.insertNode(actual->nameNode, pixel_color);
+        //Recorrer Row y rank same
+        Pixel* temp_row = hRow->first;
+        if (temp_row != nullptr){
+            string id_con = "id=\"row_"+ to_string(hRow->index) + "\"";
+            string result= "rank=same; row_" + to_string(hRow->index) + "; ";
+            graph.removeKeyWord(id_con);
+            graph.removeKeyWord("rank=same; row_" + to_string(hRow->index));
+            graph.simpleConnectNode(hRow->nameNode, temp_row->nameNode, "constraint=false, color=\"#322263\", " + id_con);
+
+            while (temp_row){
+                result += temp_row->nameNode + "; ";
+                if(temp_row->right)graph.simpleConnectNode(temp_row->nameNode, temp_row->right->nameNode, "color=\"#322263\", " + id_con);
+                temp_row = temp_row->right;
+            }
+            graph.insertInContext("{"+result+"}");
+        }
+
+        Pixel* temp_col = hCol->first;
+        if (temp_col != nullptr){
+            string id_con = "id=\"col_"+ to_string(hCol->index) + "\"";
+            graph.removeKeyWord(id_con);
+            graph.simpleConnectNode(hCol->nameNode, temp_col->nameNode, "constraint=false, color=\"#322263\", " + id_con);
+
+            while (temp_col){
+                if(temp_col->down)graph.simpleConnectNode(temp_col->nameNode, temp_col->down->nameNode, "color=\"#322263\", " + id_con);
+                temp_col = temp_col->down;
+            }
+        }
+
+    }
+    /// row, colum
     void insert(int r, int c, std::string hex){
         if (hex.empty()){
             remove(r, c);
@@ -174,9 +234,7 @@ class Layer{
 
         H_layer* rh = getOrCreateHeader(rowH, r, 1);
         H_layer* ch = getOrCreateHeader(colH, c, 0);
-        string nameNode = "p_" + to_string(c) + to_string(r);
-        string prev_col; string prev_row;
-        bool isFirst = false;
+        string nameNode = "p_" + to_string(r) + to_string(c);
 
         Pixel* existing = search(r, c);
         if (existing){
@@ -185,13 +243,12 @@ class Layer{
         }
 
         Pixel* new_pixel = new Pixel(r, c, hex);
+        new_pixel->nameNode = nameNode;
 
         //Primer pixel (row)
         if (!rh->first || rh->first->column > c){
             new_pixel->right = rh->first;
             rh->first = new_pixel;
-            prev_row = rh->nameNode;
-            isFirst = true;
         } else{
             Pixel* temp = rh->first;
             while(temp->right && temp->right->column < c){
@@ -199,14 +256,11 @@ class Layer{
             }
             new_pixel->right = temp->right;
             temp->right = new_pixel;
-            prev_row = temp->nameNode;
         }
         //Primer pixel (col)
         if (!ch->first || ch->first->row > r){
             new_pixel->down = ch->first;
             ch->first = new_pixel;
-            prev_col = ch->nameNode;
-            isFirst = true;
         } else{
             Pixel* temp = ch->first;
             while(temp->down && temp->down->row < r){
@@ -214,9 +268,8 @@ class Layer{
             }
             new_pixel->down = temp->down;
             temp->down = new_pixel;
-            prev_col = temp->nameNode;
         }
-        createInGraphviz(prev_col, prev_row, nameNode, hex, isFirst);
+        createInGraphviz(ch, rh, new_pixel, hex);
     }
 
     Pixel* search(int r, int c) {
@@ -237,7 +290,6 @@ class Layer{
         while(currRow != nullptr){
             Pixel* temp = currRow->first;
             while (temp != nullptr){
-                std::cout<<temp->color<<std::endl;
                 Pixel* next = temp->right;
                 delete temp;
                 temp = next;
@@ -259,6 +311,26 @@ class Layer{
         colH = nullptr;
     }
 
+    string pixelArt(){
+        string result = "subgraph " + tittle + "{\n";
+
+        H_layer* currRow = rowH;
+        if (currRow == nullptr) return "";
+
+        while(currRow != nullptr){
+            Pixel* temp = currRow->first;
+            while (temp != nullptr){
+                string row_ = to_string(abs(temp->row - sizeRows));
+                string col_ = to_string(temp->column);
+                result += tittle +"_"+ col_ + row_ + " [fillcolor=\""+ temp->color+"\", pos=\""+ col_ +","+ row_ +"!\"];\n";
+                temp = temp->right;
+            }
+            currRow = currRow->next;
+        }
+        cout<<result;
+        return result + "}";
+    }
+
     void checkTree(){
         H_layer * col = colH;
         H_layer * row = rowH;
@@ -266,12 +338,10 @@ class Layer{
         if (col == nullptr && row == nullptr) return;
 
         while(col != nullptr){
-            std::cout<<col->index<<std::endl;
             col = col->next;
         }
 
         while(row != nullptr){
-            std::cout<<row->index<<std::endl;
             row = row->next;
         }
     }
