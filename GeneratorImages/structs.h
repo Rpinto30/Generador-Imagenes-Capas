@@ -33,6 +33,7 @@ struct Entity{
     struct Entity* left = nullptr;
     struct Entity* right = nullptr;
     int id;
+    int height;
 
     Entity(int id_, T* data) : data(data), left(nullptr), right(nullptr), id(id_) { }
 
@@ -360,6 +361,19 @@ class LinkedList{
             return nullptr;
         };
 
+        T* getIndex(int index){
+            if (checkList() == 0){
+                BiNode<T>* temp = head;
+                while(temp != nullptr){
+                    if (temp->id == index){
+                        return temp->data;
+                    }
+                    temp = temp->next;
+                }
+            }
+            return nullptr;
+        }
+
         virtual void printData(struct BiNode<T>* node) {};
 
         void showList(){
@@ -382,6 +396,112 @@ class LinkedList{
 
         }
     };
+
+    template <typename T>
+    class DoubleCircleList{
+    protected:
+        struct BiNode<T>* head = nullptr;
+
+        int checkList(){
+            if (head == nullptr) return 1;
+            return 0;
+        }
+
+        virtual void afterInsertAction(struct BiNode<T>* temp) {}
+
+        int insert(struct BiNode<T>* new_node){
+            if (checkList() == 1){
+                head = new_node;
+                head->next = new_node;
+                head->prev = new_node;
+            }
+            else{
+                struct BiNode<T> * last = head->prev;
+
+                last->next = new_node;
+                head->prev = new_node;
+
+                new_node->next = head;
+                new_node->prev = last;
+            }
+            afterInsertAction(new_node);
+            return 0;
+        }
+
+        struct BiNode<T>* getActual(){
+            return head;
+        }
+
+        void modeForward(){
+            head = head->next;
+        }
+
+        //hacer la conversion de Node a BiNode
+        struct BiNode<T>* removeActual(){
+                if (checkList() == 1) return nullptr;
+
+                struct BiNode<T>* temp = head;
+
+                if (head->next == head) {
+                    head = nullptr;
+                } else {
+                    struct BiNode<T>* last = head->prev;
+                    head = temp->next;
+                    last->next = head;
+                    head->prev = last;
+                }
+
+                temp->next = nullptr;
+                temp->prev = nullptr;
+                return temp;
+        }
+
+        BiNode<T>* getByIndex(int id){
+            BiNode<T>* temp = getActual();
+            do{
+                if(temp->id == id) return temp;
+                temp = temp->next;
+            } while(temp != getActual());
+            return nullptr;
+        }
+
+        T* getIndex(int id){
+            BiNode<T>* temp = getActual();
+            do{
+                if(temp->id == id) return temp->data;
+                temp = temp->next;
+            } while(temp != getActual());
+            return nullptr;
+        }
+
+
+        void desligateNode(struct BiNode<T> * node){
+            if (node->next == node) {
+                head = nullptr;
+            } else {
+                BiNode<T>* front_ = node->next;
+                BiNode<T>* back_  = node->prev;
+                back_->next = front_;
+                front_->prev = back_;
+                if (node == head) head = front_;
+            }
+            node->next = nullptr;
+            node->prev = nullptr;
+
+        }
+
+        ~DoubleCircleList(){
+            if (head == nullptr) return;
+                head->prev->next = nullptr;
+                BiNode<T>* temp = head;
+                while (temp != nullptr) {
+                    BiNode<T>* deleter = temp;
+                    temp = temp->next;
+                    delete deleter;
+            }
+        }
+    };
+
 
 }
 

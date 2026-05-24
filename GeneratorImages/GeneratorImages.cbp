@@ -34,6 +34,8 @@
 		</Compiler>
 		<Unit filename="DotGenerator.h" />
 		<Unit filename="automata_cap.h" />
+		<Unit filename="automata_im.h" />
+		<Unit filename="automata_usr.h" />
 		<Unit filename="definitions.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="structs.h" />

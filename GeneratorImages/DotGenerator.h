@@ -139,6 +139,10 @@ namespace dotGenerator{
                 context += nodeA + " -> " + nodeB +" [color="+color+", "+config+"];\n";
             }
 
+            void dualConnectNode(string nodeA, string nodeB, string config){
+                context += nodeA + " <-> " + nodeB +" [color="+color+", "+config+"];\n";
+            }
+
               void simpleHorizontalConnectNode(string nodeA, string nodeB, string config){
                 context += nodeA + ":e -> " + nodeB +":o [color="+color+", "+config+"];\n";
             }

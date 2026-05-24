@@ -1,0 +1,22 @@
+graph resultPixelArt { 
+graph [splines=false]; 
+node [shape=square, width=1, height=1, label="",fixedsize=true, margin=0, style=filled, fillcolor=white]; 
+edge [style=invis];subgraph l8{
+l8_415 [fillcolor="#000000", color=none, pos="4,15!"];
+l8_615 [fillcolor="#000000", color=none, pos="6,15!"];
+l8_514 [fillcolor="#000000", color=none, pos="5,14!"];
+l8_714 [fillcolor="#000000", color=none, pos="7,14!"];
+l8_611 [fillcolor="#000000", color=none, pos="6,11!"];
+l8_711 [fillcolor="#000000", color=none, pos="7,11!"];
+l8_811 [fillcolor="#000000", color=none, pos="8,11!"];
+l8_911 [fillcolor="#000000", color=none, pos="9,11!"];
+l8_1011 [fillcolor="#000000", color=none, pos="10,11!"];
+l8_1111 [fillcolor="#000000", color=none, pos="11,11!"];
+l8_610 [fillcolor="#000000", color=none, pos="6,10!"];
+l8_710 [fillcolor="#000000", color=none, pos="7,10!"];
+l8_810 [fillcolor="#000000", color=none, pos="8,10!"];
+l8_910 [fillcolor="#000000", color=none, pos="9,10!"];
+l8_1010 [fillcolor="#000000", color=none, pos="10,10!"];
+l8_1110 [fillcolor="#000000", color=none, pos="11,10!"];
+}
+}

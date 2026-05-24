@@ -381,33 +381,102 @@ class BST{
         if (parent->left){
 
             std::string nodeLeft = tittle_nodes + std::to_string(parent->left->id);
-            graph.simpleConnectNode(parent_node, nodeLeft);
+            graph.simpleConnectNode(parent_node, nodeLeft, "id=\"bst\"");
             setConnectionsGraphviz(parent->left);
         }
 
         if (parent->right){
             std::string nodeRight = tittle_nodes + std::to_string(parent->right->id);
-            graph.simpleConnectNode(parent_node, nodeRight);
+            graph.simpleConnectNode(parent_node, nodeRight, "id=\"bst\"");
             setConnectionsGraphviz(parent->right);
         }
     };
 
-    Entity<T>* insert(Entity<T>* parent, int id, T* data){
+    int height(Entity<T>* parent){
+        if (parent == nullptr) return 0;
+        return parent->height;
+    }
+
+    int getBalance(Entity<T>* node){
+        if (node == nullptr) return 0;
+        return height(node->left) - height(node->right);
+    }
+
+    Entity<T>* rotateRight(Entity<T>* y) {
+        Entity<T>* x   = y->left;
+        Entity<T>* T2  = x->right;
+
+        x->right = y;
+        y->left  = T2;
+
+        return x;
+    }
+
+
+    Entity<T>* rotateLeft(Entity<T>* x) {
+        Entity<T>* y  = x->right;
+        Entity<T>* T2 = y->left;
+
+        y->left  = x;
+        x->right = T2;
+
+        return y;
+    }
+
+    Entity<T>* insert_AVL(Entity<T>* parent, int id, T* data, std::string label){
         if (parent == nullptr){
             Entity<T>* new_entity = new Entity<T>(id, data);
             new_entity->data->id = id;
             std::string node_string = tittle_nodes + std::to_string(id);
             new_entity->data->name = node_string;
 
-            graph.insertNode(node_string);
+            if (label != "") graph.insertNode(node_string, label);
+            else graph.insertNode(node_string);
+
+            return new_entity;
+        }
+        if (id < parent->id) parent->left = insert_AVL(parent->left, id, data, label);
+        if (id > parent->id) parent->right = insert_AVL(parent->right, id, data, label);
+
+        /*rotaciones*/
+        int bf = getBalance(parent);
+       // LL
+        if (bf > 1 && parent->left != nullptr && id < parent->left->id)
+            return rotateRight(parent);
+        // RR
+        if (bf < -1 && parent->right != nullptr && id > parent->right->id)
+            return rotateLeft(parent);
+        // LR
+        if (bf > 1 && parent->left != nullptr && id > parent->left->id) {
+            parent->left = rotateLeft(parent->left);
+            return rotateRight(parent);
+        }
+        // RL
+        if (bf < -1 && parent->right != nullptr && id < parent->right->id) {
+            parent->right = rotateRight(parent->right);
+            return rotateLeft(parent);
+        }
+
+        return parent;
+    }
+
+    Entity<T>* insert(Entity<T>* parent, int id, T* data, string label){
+        if (parent == nullptr){
+            Entity<T>* new_entity = new Entity<T>(id, data);
+            new_entity->data->id = id;
+            std::string node_string = tittle_nodes + std::to_string(id);
+            new_entity->data->name = node_string;
+
+            if (label != "") graph.insertNode(node_string, label);
+            else graph.insertNode(node_string);
             return new_entity;
         }
 
         if (id < parent->id)
-            parent->left = insert(parent->left, id, data);
+            parent->left = insert(parent->left, id, data, label);
 
         if (id > parent->id)
-            parent->right = insert(parent->right, id, data);
+            parent->right = insert(parent->right, id, data, label);
         return parent;
     }
 
@@ -422,7 +491,7 @@ class BST{
     }
 
     void updateEntity(int id_node, Entity<T>* new_entity){
-        Entity<T> found = search();
+        Entity<T> found = search(root, id_node);
 
         if (!found) return;
         found->data = new_entity->data;
@@ -443,9 +512,9 @@ class BST{
         if (node == nullptr)
             return node;
 
-        if (value < node->value) {
+        if (value < node->id) {
             node->left = remove(node->left, value);
-        } else if (value > node->value) {
+        } else if (value > node->id) {
             node->right = remove(node->right, value);
         } else {
 
@@ -469,9 +538,10 @@ class BST{
 
 
             Entity<T>* temp = minValueNode(node->right);
-            node->value = temp->value;
-            node->right = remove(node->right, temp->value);
+            node->id = temp->id;
+            node->right = remove(node->right, temp->id);
         }
+        return node;
     }
 
     void clear_postorden(Entity<T>* parent){
@@ -490,15 +560,6 @@ class BST{
         if (parent->right) std::cout<<" Der: "<<parent->right->id<<" ";
         f_preOrden(parent->left);
         f_preOrden(parent->right);
-    }
-
-    int height(Entity<T>* parent){
-        if (!parent) return 0;
-
-        int h_left = height(parent->left);
-        int h_right = height(parent->right);
-
-        return std::max(h_left, h_right) + 1;
     }
 
     /*void bsf(){
@@ -526,8 +587,8 @@ class BST{
 
     SubGraph * getGraph() { return &graph;}
 
-    void insert(int id, T* data){
-        root = insert(root, id, data);
+    void insert(int id, T* data, string label=""){
+        root = insert_AVL(root, id, data, label);
         preOrden_graphviz();
     }
 
@@ -556,7 +617,7 @@ class BST{
     }
 
     void preOrden_graphviz(){
-        graph.clearAllConections("dashed");
+        graph.removeKeyWord("id=\"bst\"");
         setConnectionsGraphviz(root);
     }
 
@@ -578,7 +639,7 @@ typedef Node<Image> ImageNode;
 
 
 //Imagenes globales
-class ListImages : private DoubleLinkedList<Image>{
+class ListImages : private DoubleCircleList<Image>{
 private:
     int globalID = 0;
     int size_doubleLinkedList;
@@ -603,9 +664,18 @@ private:
     }
 
     void setRankGraphviz() {
-        string* arr = dll_to_array();
-        graph.updateSameRank(arr, size_doubleLinkedList);
-        delete[] arr;
+        if (checkList() == 1) return;
+        string rank_ = "{rank=same; ";
+        //graph.removeKeyWord("rank=same;");
+        graph.removeKeyWord("id=\"principalimg\"");
+        ImageBiNode* temp = getActual();
+
+        do {
+            rank_ += temp->nameNode + "; ";
+            graph.simpleConnectNode(temp->nameNode, temp->next->nameNode, "dir=both ,id=\"principalimg\"");
+            temp = temp->next;
+        } while (temp != head);
+        graph.insertInContext(rank_+"}");
     }
 
     ImageBiNode* createNode(int id,Image* data){
@@ -624,14 +694,12 @@ private:
 
 
     void afterInsertAction(ImageBiNode* temp) override{
-        if(temp->next != nullptr){
+        /*if(temp->next != nullptr){
             string nodeA = temp->nameNode;
             string nodeB = temp->next->nameNode;
             graph.simpleConnectNode(nodeA, nodeB);
             graph.simpleConnectNode(nodeB, nodeA);
-        }
-
-
+        }*/
     }
 public:
     SubGraph * getGraph() { return &graph;}
@@ -657,15 +725,20 @@ public:
         temp_node->nameNode = subNode_name;
               if (node->data->layers.isEmpty()) {
             //conexion inicial
-            graph.simpleConnectNode(node->nameNode, subNode_name);
+            graph.simpleConnectNode(node->nameNode, subNode_name, "color=\"#3E444D\"");
         } else{
             //concatenar LL
-            graph.simpleConnectNode(node->data->layers.getLast()->nameNode, subNode_name);
+            graph.simpleConnectNode(node->data->layers.getLast()->nameNode, subNode_name, "color=\"#3E444D\"");
         }
         node->data->layers.insert_node(temp_node);
 
-        graph.insertNode(subNode_name);
-        graph.simpleConnectNode(subNode_name, temp_node->data->name);
+        string configNode = "shape=record, style=filled, fillcolor=\"#9999C7\"";
+        graph.insertNode_extend(subNode_name, configNode);
+        graph.simpleConnectNode(subNode_name, temp_node->data->name, "color=\"#3E444D\", style=dotted");
+    }
+
+    Image* getByID(int id){
+        return getIndex(id);
     }
 
 };
@@ -691,19 +764,18 @@ private:
         string configNode = "shape=record, style=filled, fillcolor="+color_nodes;
         graph->insertNode_extend(nameNode, configNode);
         if (isEmpty())
-            graph->simpleConnectNode(tittle_nodes, nameNode, "style=dashed");
+            graph->simpleConnectNode(tittle_nodes, nameNode, "color= \"#D8E7F0\"");
         else {
             afterInsertAction(getLast(), new_node);
         }
 
-        graph->simpleConnectNode(nameNode, "img_" + to_string(data->id), "style=dashed");
+        graph->simpleConnectNode(nameNode, "img_" + to_string(data->id), "style=dotted, color= \"#1C4F69\", id=\"conimg_"+ to_string(data->id)+ "\"");
         return new_node;
     }
 
     //Conexion de nodos en graphviz LinkedList
     void afterInsertAction(ImageNode* temp, ImageNode* actual) {
-
-        graph->simpleConnectNode(temp->nameNode, actual->nameNode, "style=dashed");
+        graph->simpleConnectNode(temp->nameNode, actual->nameNode, "color=\"#D8E7F0\"");
 
     }
 
@@ -727,11 +799,12 @@ public:
 typedef struct User{
     int id = 0;
     string name;
+    string nickname;
     string name_subNodes = "";
     string color_subNodes = "";
 
     SimpleListImages list_images;
-    User(string name_subNodes, string color_subNodes = "\"#7F008F\"") : name_subNodes(name_subNodes), color_subNodes(color_subNodes),
+    User(string name_subNodes, string color_subNodes = "\"#74B2C2\"") : name_subNodes(name_subNodes), color_subNodes(color_subNodes),
     list_images(name_subNodes, color_subNodes)
     {}
 

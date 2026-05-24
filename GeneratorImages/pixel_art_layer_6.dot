@@ -1,0 +1,19 @@
+graph resultPixelArt { 
+graph [splines=false]; 
+node [shape=square, width=1, height=1, label="",fixedsize=true, margin=0, style=filled, fillcolor=white]; 
+edge [style=invis];subgraph l6{
+l6_24 [fillcolor="#B07040", color=none, pos="2,4!"];
+l6_34 [fillcolor="#B07040", color=none, pos="3,4!"];
+l6_44 [fillcolor="#B07040", color=none, pos="4,4!"];
+l6_84 [fillcolor="#B07040", color=none, pos="8,4!"];
+l6_94 [fillcolor="#B07040", color=none, pos="9,4!"];
+l6_104 [fillcolor="#B07040", color=none, pos="10,4!"];
+l6_23 [fillcolor="#B07040", color=none, pos="2,3!"];
+l6_33 [fillcolor="#B07040", color=none, pos="3,3!"];
+l6_43 [fillcolor="#B07040", color=none, pos="4,3!"];
+l6_53 [fillcolor="#B07040", color=none, pos="5,3!"];
+l6_83 [fillcolor="#B07040", color=none, pos="8,3!"];
+l6_93 [fillcolor="#B07040", color=none, pos="9,3!"];
+l6_103 [fillcolor="#B07040", color=none, pos="10,3!"];
+}
+}
