@@ -212,7 +212,7 @@ class Layer{
             graph.insertInContext("{"+result+"}");
         }
 
-        Pixel* temp_col = hCol->first;
+         Pixel* temp_col = hCol->first;
         if (temp_col != nullptr){
             string id_con = "id=\"col_"+ to_string(hCol->index) + "\"";
             graph.removeKeyWord(id_con);
@@ -311,7 +311,9 @@ class Layer{
         colH = nullptr;
     }
 
-    string pixelArt(){
+    string pixelArt(int sizeX = 0, int sizeY = 0){
+        if (sizeX == 0) sizeX = sizeRows;
+        if (sizeY == 0) sizeY = sizeCols;
         string result = "subgraph " + tittle + "{\n";
 
         H_layer* currRow = rowH;
@@ -320,14 +322,13 @@ class Layer{
         while(currRow != nullptr){
             Pixel* temp = currRow->first;
             while (temp != nullptr){
-                string row_ = to_string(abs(temp->row - sizeRows));
+                string row_ = to_string(abs(temp->row - sizeX));
                 string col_ = to_string(temp->column);
-                result += tittle +"_"+ col_ + row_ + " [fillcolor=\""+ temp->color+"\", pos=\""+ col_ +","+ row_ +"!\"];\n";
+                result += tittle +"_"+ col_ + row_ + " [fillcolor=\""+ temp->color+"\", color=none, pos=\""+ col_ +","+ row_ +"!\"];\n";
                 temp = temp->right;
             }
             currRow = currRow->next;
         }
-        cout<<result;
         return result + "}";
     }
 
@@ -719,7 +720,6 @@ public:
         if (graph != subgraph) setSubgraph(subgraph);
         ImageNode* new_node = createNode(id, data);
         this->insert(new_node);
-        cout<<"\n tiene razon\n";
         //setRankGraphviz();
     }
 };

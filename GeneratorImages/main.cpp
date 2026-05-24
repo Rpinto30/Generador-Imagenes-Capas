@@ -40,9 +40,9 @@ int main()
     Layer* l7 = new Layer("l7");
     //Crear archivo de imagen_memoria
     dot_file.getQueue()->add(l1->getGraph());
-    dot_file.getQueue()->add(l2->getGraph());
+    //dot_file.getQueue()->add(l2->getGraph());
 
-    l1->insert(1, 2, "#FF0000");
+    /*l1->insert(1, 2, "#FF0000");
     l1->insert(1, 4, "#FF0000");
     l1->insert(2, 1, "#FF0000");
     l1->insert(2, 2, "#FF0000");
@@ -64,11 +64,183 @@ int main()
     l2->insert(2,2, "#A600FF");
     l2->insert(3,3, "#002AFF");
     l2->insert(4,4, "#00FBFF");
-    l2->insert(5,5, "#FFEE00");
+    l2->insert(5,5, "#FFEE00");*/
+
+    l1->insert(1,7,"#E88E5D");
+    l1->insert(1,8,"#E88E5D");
+    for (int i = 2; i<= 6; i++){
+        l1->insert(i,6,"#E88E5D");
+        l1->insert(i,7,"#F1CCBC");
+        l1->insert(i,8,"#F1CCBC");
+        l1->insert(i,9,"#E88E5D");
+    }
+    l1->insert(7,4,"#E88E5D");
+    l1->insert(7,5,"#E88E5D");
+    l1->insert(7,6,"#E88E5D");
+    l1->insert(7,7,"#F1CCBC");
+    l1->insert(7,8,"#F1CCBC");
+    l1->insert(7,9,"#E88E5D");
+    l1->insert(8,3,"#E88E5D");
+    l1->insert(8,4,"#F1CCBC"); //luz
+    l1->insert(8,5,"#F1CCBC"); //luz
+    l1->insert(8,6,"#E88E5D");
+    l1->insert(8,7,"#F1CCBC");
+    l1->insert(8,8,"#F1CCBC");
+    l1->insert(8,9,"#E88E5D");
+    l1->insert(8,10,"#E88E5D");
+    l1->insert(8,11,"#E88E5D");
+
+    l1->insert(9,3,"#E88E5D");
+    l1->insert(9,4,"#F1CCBC");
+    l1->insert(9,5,"#F1CCBC");
+    l1->insert(9,6,"#E88E5D"); //sombra 2
+    l1->insert(9,7,"#F1CCBC");
+    l1->insert(9,8,"#F1CCBC");
+    l1->insert(9,9,"#E88E5D");
+    l1->insert(9,10,"#F1CCBC"); //luz
+    l1->insert(9,11,"#F1CCBC"); //luz
+    l1->insert(9,12,"#E88E5D");
+    l1->insert(9,13,"#E88E5D");
+    l1->insert(9,14,"#E88E5D");
+
+    l1->insert(10,3,"#E88E5D");
+    l1->insert(10,4,"#F1CCBC");
+    l1->insert(10,5,"#F1CCBC");
+    l1->insert(10,6,"#F1CCBC");
+    l1->insert(10,7,"#F1CCBC");
+    l1->insert(10,8,"#F1CCBC");
+    l1->insert(10,9,"#F1CCBC");
+    l1->insert(10,10,"#F1CCBC"); //luz
+    l1->insert(10,11,"#F1CCBC"); //luz
+    l1->insert(10,12,"#E88E5D");
+    l1->insert(10,13,"#F1CCBC");
+    l1->insert(10,14,"#F1CCBC");
+    l1->insert(10,15,"#E88E5D");
+
+    l1->insert(11,2,"#E88E5D");
+    l1->insert(11,3,"#F1CCBC");
+    l1->insert(11,4,"#F1CCBC");
+    l1->insert(11,5,"#F1CCBC");
+    l1->insert(11,6,"#F1CCBC");
+    l1->insert(11,7,"#F1CCBC");
+    l1->insert(11,8,"#F1CCBC");
+    l1->insert(11,9,"#F1CCBC");
+    l1->insert(11,10,"#F1CCBC"); //luz
+    l1->insert(11,11,"#F1CCBC"); //luz
+    l1->insert(11,12,"#F1CCBC");
+    l1->insert(11,13,"#F1CCBC");
+    l1->insert(11,14,"#F1CCBC");
+    l1->insert(11,15,"#E88E5D");
+
+
+    for (int i = 12; i <= 14; i++){
+        l1->insert(i,1,"#E88E5D");
+        l1->insert(i,2,"#F1CCBC");
+        l1->insert(i,3,"#F1CCBC");
+        l1->insert(i,4,"#F1CCBC");
+        l1->insert(i,5,"#F1CCBC");
+        l1->insert(i,6,"#F1CCBC");
+        l1->insert(i,7,"#F1CCBC");
+        l1->insert(i,8,"#F1CCBC");
+        l1->insert(i,9,"#F1CCBC");
+        l1->insert(i,10,"#F1CCBC");
+        l1->insert(i,11,"#F1CCBC");
+        l1->insert(i,12,"#F1CCBC");
+        l1->insert(i,13,"#F1CCBC");
+        l1->insert(i,14,"#F1CCBC");
+        l1->insert(i,15,"#E88E5D");
+    }
+
+    for (int i = 11; i<=15; i+=4){
+        l1->insert(i,2,"#E88E5D");
+        l1->insert(i,3,"#F1CCBC");
+        l1->insert(i,4,"#F1CCBC");
+        l1->insert(i,5,"#F1CCBC");
+        l1->insert(i,6,"#F1CCBC");
+        l1->insert(i,7,"#F1CCBC");
+        l1->insert(i,8,"#F1CCBC");
+        l1->insert(i,9,"#F1CCBC");
+        l1->insert(i,10,"#F1CCBC");
+        l1->insert(i,11,"#F1CCBC");
+        l1->insert(i,12,"#F1CCBC");
+        l1->insert(i,13,"#F1CCBC");
+        l1->insert(i,14,"#F1CCBC");
+        l1->insert(i,15,"#E88E5D");
+    }
+
+    for (int i = 16; i<=18; i++){
+        l1->insert(i,3,"#E88E5D");
+        l1->insert(i,4,"#F1CCBC");
+        l1->insert(i,5,"#F1CCBC");
+        l1->insert(i,6,"#F1CCBC");
+        l1->insert(i,7,"#F1CCBC");
+        l1->insert(i,8,"#F1CCBC");
+        l1->insert(i,9,"#F1CCBC");
+        l1->insert(i,10,"#F1CCBC");
+        l1->insert(i,11,"#F1CCBC");
+        l1->insert(i,12,"#F1CCBC");
+        l1->insert(i,13,"#F1CCBC");
+        l1->insert(i,14,"#E88E5D");
+    }
+
+    l2->insert(2, 7, "#F5DFC4");
+    l2->insert(2, 8, "#F5DFC4");
+
+    l2->insert(8, 4, "#F5DFC4");
+    l2->insert(8, 5, "#F5DFC4");
+
+    l2->insert(9, 10, "#F5DFC4");
+    l2->insert(9, 11, "#F5DFC4");
+
+    l2->insert(10, 13, "#F5DFC4");
+    l2->insert(10, 14, "#F5DFC4");
+
+    l2->insert(11, 3, "#F5DFC4");
+    l2->insert(11, 4, "#F5DFC4");
+    l2->insert(11, 5, "#F5DFC4");
+
+
+    l2->insert(12, 2, "#F5DFC4");
+
+
+    l3->insert(9, 6, "#EBA36C");
+    l3->insert(10, 4, "#EBA36C");
+    l3->insert(10, 5, "#EBA36C");
+    l3->insert(11, 12, "#EBA36C");
+    l3->insert(10, 9, "#EBA36C");
+    l3->insert(11, 6, "#EBA36C");
+    l3->insert(11, 9, "#EBA36C");
+    l3->insert(12, 6, "#EBA36C");
+    l3->insert(12, 10, "#EBA36C");
+    l3->insert(12, 11, "#EBA36C");
+    l3->insert(12, 12, "#EBA36C");
+
+
+    l3->insert(13, 4, "#EBA36C");
+    l3->insert(13, 5, "#EBA36C");
+    l3->insert(13, 13, "#EBA36C");
+    l3->insert(13, 12, "#EBA36C");
+
+
+    l3->insert(14, 3, "#EBA36C");
+    l3->insert(16, 2, "#EBA36C");
+
+
+    l3->insert(17, 3, "#EBA36C");
+    l3->insert(17, 14, "#EBA36C");
+
+
+    l3->insert(18, 3, "#EBA36C");
+    l3->insert(18, 14, "#EBA36C");
+
     PixelGraph px_l1;
-    px_l1.addToContext(l1->pixelArt());
-    px_l1.addToContext(l2->pixelArt());
+    cout<<"Creando Pixel art..."<<endl;
+    px_l1.addToContext(l1->pixelArt(18,18));
+    px_l1.addToContext(l2->pixelArt(18,18));
+    px_l1.addToContext(l3->pixelArt(18,18));
     px_l1.generateNewFiles();
+
+    cout<<"PixelArt Creado!"<<endl;
 
     bt_layers.insert(9, new Layer_struct(l1));
     bt_layers.insert(2, new Layer_struct(l2));
