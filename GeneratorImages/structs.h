@@ -44,25 +44,31 @@ struct Entity{
 
 
 template <typename T>
-    struct Node{
+struct Node{
         int id = 0;
         T* data;
         std::string nameNode = "";
         struct Node* next;
 
+        Node(T value, bool owns = true)
+            : owns_data(owns), id(0), data(new T(value)), nameNode(""), next(nullptr) {
+        }
         Node(T* data, bool owns = true) : data(data), owns_data(owns), next(nullptr) {}
         Node() : data(new T()), owns_data(true), next(nullptr) {}
 
-       /* ~Node() {
-            if (owns_data && data) delete data;
-        }*/
+       ~Node() {
+            if (!owns_data && data != nullptr) {
+                delete data;
+                data = nullptr;
+            }
+        }
 
         private:
             bool owns_data;
 };
 
 template <typename T>
-    struct BiNode{
+struct BiNode{
         int id;
         T* data;
         std::string nameNode = "";
@@ -163,6 +169,21 @@ class LinkedList{
             insert(node);
         }
 
+        void insert_node(T data){
+            Node<T>* new_node = new Node<T>(data,false);
+            insert(new_node);
+        }
+
+        int size(){
+            Node<T>* temp = head;
+            int sz = 0;
+            while (temp){
+                sz++;
+                temp = temp->next;
+            }
+            return sz;
+        }
+
         bool isEmpty(){
             if (head) return false;
             else return true;
@@ -176,6 +197,19 @@ class LinkedList{
                 temp = temp->next;
             }
             return temp;
+        }
+
+        T* getIndex(int index){
+            if (checkList() == 0){
+                Node<T>* temp = head;
+                while(temp != nullptr){
+                    if (temp->id == index){
+                        return temp->data;
+                    }
+                    temp = temp->next;
+                }
+            }
+            return nullptr;
         }
 
         T** to_array(){
@@ -200,6 +234,30 @@ class LinkedList{
 
             return arr;
         }
+
+       struct Iterator {
+    Node<T>* current;
+
+    Iterator(Node<T>* node) : current(node) {}
+
+    T& operator*() { return *(current->data); }
+
+    Iterator& operator++() {
+        current = current->next;
+        return *this;
+    }
+
+    bool operator!=(const Iterator& other) const {
+        return current != other.current;
+    }
+
+    bool operator==(const Iterator& other) const {
+        return current == other.current;
+    }
+};
+
+    Iterator begin() const { return Iterator(head); }
+    Iterator end() const   { return Iterator(nullptr); }
 
 
     };

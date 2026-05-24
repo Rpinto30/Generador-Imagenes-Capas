@@ -2,12 +2,12 @@
 #include "structs.h"
 #include "DotGenerator.h"
 #include "definitions.h"
+#include "automata_cap.h"
 
 using namespace std;
 using namespace definitions;
 using namespace dotGenerator;
-
-
+using namespace auto_cap;
 
 BST<User> bt("Usuarios", "us_", "red");
 BST<Layer_struct> bt_layers("Capas", "lyr_", "\"#FF333340\"");
@@ -20,10 +20,48 @@ DotFile dot_file("GESTION_VISUAL_DE_MEMORIA", "us_ej", "\nrankdir=TB; nodesep=0.
 void graphIntoDotFile();
 int generateDot(bool debugMessage);
 
+void corazoncit(){
+    Layer* l1 = new Layer("l1");
+    l1->insert(1, 2, "#FF0000");
+    l1->insert(1, 4, "#FF0000");
+    l1->insert(2, 1, "#FF0000");
+    l1->insert(2, 2, "#FF0000");
+    l1->insert(2, 3, "#FF0000");
+    l1->insert(2, 4, "#FF0000");
+    l1->insert(2, 5, "#FF0000");
+    l1->insert(3, 1, "#FF0000");
+    l1->insert(3, 2, "#FF0000");
+    l1->insert(3, 3, "#FF0000");
+    l1->insert(3, 4, "#FF0000");
+    l1->insert(3, 5, "#FF0000");
+    l1->insert(4, 2, "#FF0000");
+    l1->insert(4, 3, "#FF0000");
+    l1->insert(4, 4, "#FF0000");
+    l1->insert(5, 3, "#FF0000");
+    l1->pixelArt();
+    delete l1;
+}
+
 int main()
 {
-    graphIntoDotFile();
+     try {
+        LinkedList<BlockCap> bloques = loadCap("capas.cap");
+        cout<<"leido";
+        for (BlockCap& bloque : bloques) {
+            cout << "ID: " << bloque.id << "\n";
+            for (DataCap& fila : *(bloque.rows)) {
+                cout << "  fila="  << fila.row
+                     << " col="   << fila.column
+                     << " color=" << fila.color << "\n";
+            }
+        }
+    } catch (const exception& e) {
+        cerr << "Error: " << e.what() << "\n";
+    }
+    return 0;
 
+    //graphIntoDotFile();
+    /*
     User* us = new User("us_10");
     bt.insert(10, us);
     User* us2 = new User("us_5");
@@ -41,30 +79,6 @@ int main()
     //Crear archivo de imagen_memoria
     dot_file.getQueue()->add(l1->getGraph());
     //dot_file.getQueue()->add(l2->getGraph());
-
-    /*l1->insert(1, 2, "#FF0000");
-    l1->insert(1, 4, "#FF0000");
-    l1->insert(2, 1, "#FF0000");
-    l1->insert(2, 2, "#FF0000");
-    l1->insert(2, 3, "#FF0000");
-    l1->insert(2, 4, "#FF0000");
-    l1->insert(2, 5, "#FF0000");
-    l1->insert(3, 1, "#FF0000");
-    l1->insert(3, 2, "#FF0000");
-    l1->insert(3, 3, "#FF0000");
-    l1->insert(3, 4, "#FF0000");
-    l1->insert(3, 5, "#FF0000");
-    l1->insert(4, 2, "#FF0000");
-    l1->insert(4, 3, "#FF0000");
-    l1->insert(4, 4, "#FF0000");
-    l1->insert(5, 3, "#FF0000");
-    l1->pixelArt();
-
-    l2->insert(1, 1, "#FF00C8");
-    l2->insert(2,2, "#A600FF");
-    l2->insert(3,3, "#002AFF");
-    l2->insert(4,4, "#00FBFF");
-    l2->insert(5,5, "#FFEE00");*/
 
     l1->insert(1,7,"#E88E5D");
     l1->insert(1,8,"#E88E5D");
@@ -272,7 +286,7 @@ int main()
     //User* us4 = new User("us_15");
     //bt.insert(15, us4);
 
-    generateDot(false);
+    generateDot(false);*/
     return 0;
 }
 

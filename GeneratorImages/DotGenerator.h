@@ -355,7 +355,7 @@ namespace dotGenerator{
                 string context_header = "graph resultPixelArt { \ngraph [splines=false]; \nnode [shape=square, width=1, height=1, label=\"\",fixedsize=true, margin=0, style=filled, fillcolor=white]; \nedge [style=invis];";
                 if (context != context_header + subgraphs +"\n}")
                 {
-                    if(subgraphs == "") subgraphs = "subgraph{ non [fillcolor=black, color=none, pos=\"0,0!\"]}"
+                    if(subgraphs == "") subgraphs = "subgraph{ non [fillcolor=black, color=none, pos=\"0,0!\"]}";
 
                     context = context_header + subgraphs +"\n}";
                     return 0;
