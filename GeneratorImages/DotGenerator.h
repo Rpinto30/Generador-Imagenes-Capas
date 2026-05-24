@@ -276,7 +276,7 @@ namespace dotGenerator{
             int generateFile(){
                 constructFile("graph"+tittle+".dot");
 
-                string result_str = "dot -Tpng graph" + tittle + ".dot -o output.png";
+                string result_str = "dot -Tpng graph" + tittle + ".dot -o "+output_file_tittle+".png";
                 //cout<<result_str<<endl;
                 int result = system(result_str.c_str());
                 return result;
@@ -335,12 +335,15 @@ namespace dotGenerator{
             int generateFile(){
                 constructFile("pixel_art_"+tittle+".dot");
 
-                string result_str = "dot -Kneato -Tpng pixel_art_" + tittle + ".dot -o result_"+tittle+".png";
+                string result_str = "dot -Kneato -Tpng pixel_art_" + tittle + ".dot -o "+output_file_tittle+".png";
                 int result = system(result_str.c_str());
                 return result;
             }
 
         public:
+
+            PixelGraph(string tittle, string output_file_tittle): tittle(tittle), output_file_tittle(output_file_tittle) {}
+
 
             void resetContext() {
                 context = "digraph resultPixelArt {}";

@@ -3,22 +3,29 @@
 #include "DotGenerator.h"
 #include "definitions.h"
 #include "automata_cap.h"
+#include "automata_im.h"
+#include "automata_usr.h"
+
 
 using namespace std;
 using namespace definitions;
 using namespace dotGenerator;
 using namespace auto_cap;
+using namespace auto_im;
+using namespace auto_usr;
 
 BST<User> bt("Usuarios", "us_", "red");
 BST<Layer_struct> bt_layers("Capas", "lyr_", "\"#FF333340\"");
 ListImages ls("Imagenes", "img_", "\"#7FBA85\"", "lyr_");
 
 
-DotFile dot_file("GESTION_VISUAL_DE_MEMORIA", "us_ej", "\nrankdir=TB; nodesep=0.5; ranksep=0.8; splines=ortho;\n");
+DotFile dot_file("GESTION_VISUAL_DE_MEMORIA", "output", "\nrankdir=TB; nodesep=0.5; ranksep=0.8; splines=ortho;\n");
 
 /*REFERENCIA A FUNCIONES*/
 void graphIntoDotFile();
 int generateDot(bool debugMessage);
+
+void load_layers();
 
 void corazoncit(){
     Layer* l1 = new Layer("l1");
@@ -44,23 +51,36 @@ void corazoncit(){
 
 int main()
 {
+    load_layers();
+    /*
      try {
-        LinkedList<BlockCap> bloques = loadCap("capas.cap");
+        LinkedList<BlockIm> bloques = loadIm("imagenes.im");
         cout<<"leido";
-        for (BlockCap& bloque : bloques) {
-            cout << "ID: " << bloque.id << "\n";
-            for (DataCap& fila : *(bloque.rows)) {
-                cout << "  fila="  << fila.row
-                     << " col="   << fila.column
-                     << " color=" << fila.color << "\n";
-            }
+        for (BlockIm& bloque : bloques) {
+            cout << "ID: " << bloque.id << " capas: ";
+            for (string& capa : *(bloque.layers))
+                cout << capa << " ";
+            cout << "\n";
         }
     } catch (const exception& e) {
         cerr << "Error: " << e.what() << "\n";
     }
-    return 0;
+    return 0;*/
 
-    //graphIntoDotFile();
+    /*try {
+        LinkedList<UserUsr> users = loadUsr("usuarios.usr");
+
+        for (UserUsr& user : users) {
+            cout << "Usuario: " << user.name << " imagenes: ";
+            for (string& img : *(user.images))
+                cout << img << " ";
+            cout << "\n";
+        }
+    } catch (const exception& e) {
+        cerr << "Error: " << e.what() << "\n";
+    }*/
+
+    graphIntoDotFile();
     /*
     User* us = new User("us_10");
     bt.insert(10, us);
@@ -285,9 +305,57 @@ int main()
 
     //User* us4 = new User("us_15");
     //bt.insert(15, us4);
-
-    generateDot(false);*/
+*/
+    generateDot(false);
     return 0;
+}
+
+int generateDotMatrix(string tittle, SubGraph* subgraph, bool debugMessage = true){
+    DotFile temp_file(tittle,  tittle, "\nrankdir=TB; nodesep=0.5; ranksep=0.8; splines=ortho;\n");
+    temp_file.getQueue()->add(subgraph);
+    cout<<"Generando matriz de Layer: " + tittle;
+    int t = temp_file.generateNewFiles();
+
+    if (t == 0){
+        if(debugMessage) cout<<" $ .dot generador con exito"<<endl;
+        return 0;
+    } else if (t == 2) {
+         if(debugMessage) cout<<" $ .ya generado"<<endl;
+         return 1;
+    } else{
+        if(debugMessage) cout<<" x Error al crear el .dot"<<endl;
+        return -1;
+    }
+}
+
+void drawPixelArt(string tittle, Layer* layer, bool debugMessage = true){
+    PixelGraph pixel_generator(tittle, "pixelArt_" + tittle);
+    if(debugMessage = true) cout<<"Creando Pixel art..."<<endl;
+    pixel_generator.addToContext(layer->pixelArt(18,18));
+    pixel_generator.generateNewFiles();
+    if (debugMessage = true) cout<<"PixelArt Creado!"<<endl;
+}
+
+void load_layers(){
+    try {
+        LinkedList<BlockCap> bloques = loadCap("capas.cap");
+        cout<<"Imagenes han sido cargadas correctamente!";
+        for (BlockCap& bloque : bloques) {
+            cout << "ID: " << bloque.id << "\n";
+            Layer_struct* layer = new Layer_struct(new Layer("l"+ bloque.id));
+            for (DataCap& fila : *(bloque.rows)) {
+                layer->layer->insert(fila.row, fila.column, fila.color);
+                cout << "  fila="  << fila.row
+                     << " col="   << fila.column
+                     << " color=" << fila.color << "\n";
+            }
+            drawPixelArt("layer_"+bloque.id, layer->layer);
+            //generateDotMatrix("layer_"+bloque.id, layer->layer->getGraph());
+            bt_layers.insert(stoi(bloque.id), layer);
+        }
+    } catch (const exception& e) {
+        cerr << "Error: " << e.what() << "\n";
+    }
 }
 
 void graphIntoDotFile(){
