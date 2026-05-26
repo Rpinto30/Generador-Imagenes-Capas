@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1779618338 source:c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto-final-edd\generadorimagenes\generatorimages\main.cpp
+1779777914 source:c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto-final-edd\generadorimagenes\generatorimages\main.cpp
 	<iostream>
 	<chrono>
 	"structs.h"
@@ -20,7 +20,7 @@
 	<filesystem>
 	"structs.h"
 
-1779619663 c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto-final-edd\generadorimagenes\generatorimages\definitions.h
+1779778359 c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto-final-edd\generadorimagenes\generatorimages\definitions.h
 	<iostream>
 	"structs.h"
 	"dotGenerator.h"

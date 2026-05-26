@@ -392,6 +392,11 @@ class BST{
         }
     };
 
+    void updateHeight(Entity<T>* node) {
+        if (node == nullptr) return;
+        node->height = 1 + std::max(height(node->left), height(node->right));
+    }
+
     int height(Entity<T>* parent){
         if (parent == nullptr) return 0;
         return parent->height;
@@ -409,6 +414,9 @@ class BST{
         x->right = y;
         y->left  = T2;
 
+        updateHeight(y);
+        updateHeight(x);
+
         return x;
     }
 
@@ -420,12 +428,16 @@ class BST{
         y->left  = x;
         x->right = T2;
 
+        updateHeight(x);
+        updateHeight(y);
+
         return y;
     }
 
     Entity<T>* insert_AVL(Entity<T>* parent, int id, T* data, std::string label){
         if (parent == nullptr){
             Entity<T>* new_entity = new Entity<T>(id, data);
+            new_entity->height = 1;
             new_entity->data->id = id;
             std::string node_string = tittle_nodes + std::to_string(id);
             new_entity->data->name = node_string;
@@ -439,6 +451,7 @@ class BST{
         if (id > parent->id) parent->right = insert_AVL(parent->right, id, data, label);
 
         /*rotaciones*/
+        updateHeight(parent);
         int bf = getBalance(parent);
        // LL
         if (bf > 1 && parent->left != nullptr && id < parent->left->id)
@@ -587,6 +600,11 @@ class BST{
 
     SubGraph * getGraph() { return &graph;}
 
+    void preOrden_graphviz(){
+        graph.removeKeyWord("id=\"bst\"");
+        setConnectionsGraphviz(root);
+    }
+
     void insert(int id, T* data, string label=""){
         root = insert_AVL(root, id, data, label);
         preOrden_graphviz();
@@ -616,10 +634,7 @@ class BST{
         //bsf();
     }
 
-    void preOrden_graphviz(){
-        graph.removeKeyWord("id=\"bst\"");
-        setConnectionsGraphviz(root);
-    }
+
 
     ~BST(){
         clear_postorden(root);

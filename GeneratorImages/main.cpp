@@ -16,6 +16,7 @@ using namespace auto_cap;
 using namespace auto_im;
 using namespace auto_usr;
 
+int last_id_user = 1;
 BST<User> bt("Usuarios", "us_", "white");
 BST<Layer_struct> bt_layers("Capas", "lyr_", "\"#FF333340\"");
 ListImages ls("Imagenes", "img_", "\"#7FBA85\"", "lyr_");
@@ -31,17 +32,100 @@ void load_layers();
 void load_images();
 void load_users();
 
+int massive(bool message = true){
+    //graphIntoDotFile();
+     if (message) cout<<"Cargado archivos..."<<endl;
+    try{
+        load_layers();
+        load_images();
+        load_users();
+        if (message) cout<<"! Archivos cargados!"<<endl;
+        return 0;
+    } catch(const runtime_error& e){
+        if (message) cout<<"Hubo un error al cargar los archivos... porfavor, reincia el sistema..."<<endl;
+        return -1;
+    }
+
+
+}
+
+
+/*METODOS FRONT (DE INTERFAZ PARA LOS CHAVOS)*/
+void userOptions(){
+    string option;
+    do{
+        cout<<"-------------------------------------------------------------------------"<<endl;
+        cout<<"\t1) Crear un nuevo usuario"<<endl;
+        cout<<"\t2) Ver Usuarios"<<endl;
+        cout<<"\t3) Eliminar un usuario"<<endl;
+        cout<<"\t4) Modificar un usuario"<<endl;
+        cout<<"\t-1) Volver"<<endl;
+        cout<<"\t> Elige una de las opciones: ";
+        cin>>option;
+
+        if (option == "1"){
+            string name;
+            cout<<"\t---------------------------------"<<endl;
+            cout<<"\t> Agrega un nombre al usuario: ";
+            cin>>name;
+            User* user_ = new User("us_" + to_string(last_id_user));
+            user_->nickname = name;
+            bt.insert(last_id_user, user_, user_->nickname);
+            cout<<"\t! Se ha creado el usuario y agregado al sistema!"<<endl; break;
+        }
+
+    } while(option != "-1");
+}
+
+void imagesOptions(){
+    string option;
+    do{
+        cout<<"-------------------------------------------------------------------------"<<endl;
+        cout<<"\t1) Generar por usuario"<<endl;
+        cout<<"\t2) Generar por capas"<<endl;
+        cout<<"\t3) Generar por recorrido"<<endl;
+        cout<<"\t-1) Volver"<<endl;
+        cout<<"\t> Elige una de las opciones: ";
+        cin>>option;
+    } while(option != "-1");
+}
+
+void memoryOptions(){
+    string option;
+    do{
+        cout<<"-------------------------------------------------------------------------"<<endl;
+        cout<<"\t1) Mostrar Imagenes"<<endl;
+        cout<<"\t2) Mostrar Arbol de capas"<<endl;
+        cout<<"\t3) Mostrar capa"<<endl;
+        cout<<"\t4) Mostrar Imagen y arbol de capas"<<endl;
+        cout<<"\t5) Mostrar Arbol de usuarios"<<endl;
+        cout<<"\t-1) Volver"<<endl;
+        cout<<"\t> Elige una de las opciones: ";
+        cin>>option;
+    } while(option != "-1");
+}
+
+
 
 int main()
 {
-    graphIntoDotFile();
-    load_layers();
-    load_images();
-    load_users();
+    if(massive() != 0) return -1;
+    string option;
+    do{
+        cout<<endl<<"=========================GENERADOR DE IMAGENES EN PIXEL-ART========================="<<endl;
+        cout<<"1) Opciones de usuario"<<endl;
+        cout<<"2) Generacion de imagenes"<<endl;
+        cout<<"3) Gestionar la memoria"<<endl;
+        cout<<"-1) Salir"<<endl;
+        cout<<"> Elige una de las opciones: ";
+        cin>>option;
 
-    cout<<"Archivos cargados!"<<endl;
+        if (option == "1") userOptions();
+        if (option == "2") imagesOptions();
+        if (option == "3") memoryOptions();
+    } while(option != "-1");
 
-    generateDot(true);
+    //generateDot(true);
     return 0;
 }
 
@@ -119,6 +203,7 @@ void load_users(){
             }
             id++;
         }
+        last_id_user = id+1;
     } catch (const exception& e) {
         cerr << "Error: " << e.what() << "\n";
     }
