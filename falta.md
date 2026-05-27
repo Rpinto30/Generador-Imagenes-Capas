@@ -1,27 +1,25 @@
 Faltante:
 
 - Crear interfaz para los usuarios{
-CREAR
-VERLOS
-ELIMINARLOS
-MODIFICAR
+CREAR LIST
+VERLOS LISTO
+ELIMINARLOS LISTO
+MODIFICAR LISTO
 }
 
-
-
-- Agregar imagenes nuevas a usuarios por la interfaz (id unicos)
+- Agregar imagenes nuevas a usuarios por la interfaz (id unicos)  LISTO
 - Eliminar imagenes (buscar usuario, id de la imagen y puff, actualizar lista doble)
 
 - Generar imagenes - Por capa{
     ingresar id
     buscar en el arbol y graficar
-}
+} LISTO
 
 - Generar imagenes - Por usuario{
     ingresar id usuario
     elefir imagen y graficar segun la cola
-}
-- Generar imagenes (según recorrido, post...)
+} LISTO
+- Generar imagenes (según recorrido, post...) LISTO
 
 
 GRAFICAR LA MEMORIA:

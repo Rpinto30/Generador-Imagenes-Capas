@@ -34,6 +34,7 @@ void load_users();
 
 void genImageByUser(int id);
 void genImageByLayer(int id);
+void generateBySearch();
 
 int massive(bool message = true){
     //graphIntoDotFile();
@@ -62,6 +63,9 @@ void userOptions(){
         cout<<"\t2) Ver Usuarios"<<endl;
         cout<<"\t3) Eliminar un usuario"<<endl;
         cout<<"\t4) Modificar un usuario"<<endl;
+        cout<<"\t5) Ver imagenes de usuario"<<endl;
+        cout<<"\t6) Agregar imagen a usuario"<<endl;
+        cout<<"\t7) Eliminar imagen de usuario"<<endl;
         cout<<"\t-1) Volver"<<endl;
         cout<<"\t> Elige una de las opciones: ";
         cin>>option;
@@ -95,6 +99,60 @@ void userOptions(){
             cin>>id;
             bt.updateName(id, nick, "\t");
         }
+        else if (option == "5"){
+            int id;
+            cout<<"\t---------------------------------"<<endl;
+            bt.print_preorden("\t");
+            cout<<"\t> Selecciona el id del usuario: ";
+            cin>>id;
+            Entity<User>* user_ = bt.search(id);
+            if (!user_) continue;
+            user_->data->list_images.printData("\t");
+
+        }else if (option == "6"){
+            int id;
+            cout<<"\t---------------------------------"<<endl;
+            bt.print_preorden("\t");
+            cout<<"\t> Selecciona el id del usuario: ";
+            cin>>id;
+            Entity<User>* user_ = bt.search(id);
+            if (!user_) continue;
+            int id_img;
+            cout<<"\t Imagenes del usuario: "<<endl;
+            user_->data->list_images.printData("\t");
+            ls.print_list("\t");
+            cout<<"\t> Selecciona el id de la imagen que deseas agregar: ";
+            cin>>id_img;
+            if (user_->data->list_images.getImageIndex(id_img)){
+                cout<<"\tx Esa imagen ya esta utilizada por ese usuario!"<<endl;
+                continue;
+            } else{
+                Image* img = ls.getByID(id_img);
+                user_->data->list_images.add(id_img, img, bt.getGraph());
+                cout<<"\t! Imagen agregada correctamente al usuario!"<<endl;
+            }
+        } else if (option == "7"){
+            int id;
+            cout<<"\t---------------------------------"<<endl;
+            bt.print_preorden("\t");
+            cout<<"\t> Selecciona el id del usuario: ";
+            cin>>id;
+            Entity<User>* user_ = bt.search(id);
+            if (!user_) continue;
+            int id_img;
+            cout<<"\t Imagenes del usuario: "<<endl;
+            user_->data->list_images.printData("\t");
+            cout<<"\t> Selecciona el id de la imagen que deseas remover: ";
+            cin>>id_img;
+            if (user_->data->list_images.getImageIndex(id_img)){
+                user_->data->list_images.delete_id(id_img);
+                cout<<"\t! La imagen fue removida del usuario con exito!"<<endl;
+            } else{
+                cout<<"\tx Esa imagen no es propia del usuario, no se puede remover!"<<endl;
+                continue;
+            }
+        }
+
 
     } while(option != "-1");
 }
@@ -124,6 +182,8 @@ void imagesOptions(){
             cout<<"\t> Selecciona el id del usuario: ";
             cin>>id;
             genImageByLayer(id);
+        } else if (option == "3"){
+            generateBySearch();
         }
     } while(option != "-1");
 }
@@ -144,7 +204,7 @@ void memoryOptions(){
 }
 
 
-
+/*MAIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIN*/
 int main()
 {
     if(massive() != 0) return -1;
@@ -183,9 +243,14 @@ void genImageByUser(int id){
     if (!temp) return;
     PixelGraph pixel_generator("pixel_art_de_"+user->nickname, "pixelArt_" + user->nickname);
     int img_count = 0;
+
+    int maxX = temp->data->layer->getWidth(); int maxY = temp->data->layer->getHeight();
     while(temp){
         cout<<"\tCargando capa "<<to_string(++img_count)<<"..."<<endl;
-        pixel_generator.addToContext(temp->data->layer->pixelArt(18,18));
+        if (temp->data->layer->getWidth() > maxX) maxX = temp->data->layer->getWidth();
+        if (temp->data->layer->getHeight() > maxX) maxY = temp->data->layer->getHeight();
+
+        pixel_generator.addToContext(temp->data->layer->pixelArt(maxX,maxY));
         temp = temp->next;
     }
 
@@ -194,11 +259,84 @@ void genImageByUser(int id){
     cout<<"\t\n ! PixelArt de "<<user->nickname<<" ha sido creado en la carpeta ResultImages!"<<endl;
 }
 
-void genImageByLayer(){
+void genImageByLayer(int id){
+    Entity<Layer_struct>* ent = bt_layers.search(id);
+    Layer_struct* layer_ = ent->data;
+
+    cout<<"\tSe esta generando tu capa..."<<endl;
+    PixelGraph pixel_generator("capa_" + to_string(id), "capa_" + to_string(id));
+    pixel_generator.addToContext(layer_->layer->pixelArt());
+    pixel_generator.generateNewFiles(true);
+    cout<<"\t\n ! PixelArt ha sido creado en la carpeta ResultImages!"<<endl;
 
 }
 
 
+void imgPreOrden(Entity<Layer_struct>* node, PixelGraph* pixel_generator, int x, int y){
+    if (node->data->layer->getWidth() > x) x = node->data->layer->getWidth();
+    if (node->data->layer->getHeight() > y) y = node->data->layer->getHeight();
+
+    cout<<"\tcargando capa..."<<endl;
+    pixel_generator->addToContext(node->data->layer->pixelArt(x,y));
+
+    if (node->left) imgPreOrden(node->left,pixel_generator, x,y);
+    if (node->right) imgPreOrden(node->right,pixel_generator, x,y);
+}
+
+void imgInOrden(Entity<Layer_struct>* node, PixelGraph* pixel_generator, int x, int y){
+    if (node->data->layer->getWidth() > x) x = node->data->layer->getWidth();
+    if (node->data->layer->getHeight() > y) y = node->data->layer->getHeight();
+
+    if (node->left) imgPreOrden(node->left,pixel_generator,x,y);
+    cout<<"\tcargando capa..."<<endl;
+    pixel_generator->addToContext(node->data->layer->pixelArt(x,y));
+    if (node->right) imgPreOrden(node->right,pixel_generator,x,y);
+}
+
+void imgPostOrden(Entity<Layer_struct>* node, PixelGraph* pixel_generator, int x, int y){
+    if (node->data->layer->getWidth() > x) x = node->data->layer->getWidth();
+    if (node->data->layer->getHeight() > y) y = node->data->layer->getHeight();
+
+    if (node->left) imgPreOrden(node->left,pixel_generator,x,y);
+    if (node->right) imgPreOrden(node->right,pixel_generator,x,y);
+
+    cout<<"\tcargando capa..."<<endl;
+    pixel_generator->addToContext(node->data->layer->pixelArt());
+}
+
+void generateBySearch(){
+    Entity<Layer_struct>* root = bt_layers.getRoot();
+    if (!root) return;
+    string option;
+    cout<<"-------------------------------------------------"<<endl;
+    cout<<"\t1) Recorrido preorden"<<endl;
+    cout<<"\t2) Recorrido inorden"<<endl;
+    cout<<"\t3) Recorrido postorden"<<endl;
+    cout<<"\tQue tipo de recorrido deseas probar para generar la imagen: ";
+    cin>>option;
+
+
+    int maxX = root->data->layer->getWidth(); int maxY = root->data->layer->getHeight();
+    if (option == "1"){
+        PixelGraph pixel_generator("preorden_pixelArt", "preorden_pixelArt");
+        imgPreOrden(root, &pixel_generator, maxX, maxY);
+        pixel_generator.generateNewFiles(true);
+    } else if (option == "2"){
+        PixelGraph pixel_generator("inorden_pixelArt", "inorden_pixelArt");
+        imgInOrden(root, &pixel_generator, maxX, maxY);
+        pixel_generator.generateNewFiles(true);
+    } else if (option == "3"){
+        PixelGraph pixel_generator("postorden_pixelArt", "postorden_pixelArt");
+        imgPostOrden(root, &pixel_generator, maxX, maxY);
+        pixel_generator.generateNewFiles(true);
+    }
+
+
+    cout<<"\t\n ! PixelArt ha sido creado en la carpeta ResultImages!"<<endl;
+
+}
+
+/*Adicionales*/
 int generateDotMatrix(string tittle, SubGraph* subgraph, bool debugMessage = true){
     DotFile temp_file(tittle,  tittle, "\nrankdir=TB; nodesep=0.5; ranksep=0.8; splines=ortho;\n");
     temp_file.getQueue()->add(subgraph);
@@ -215,14 +353,6 @@ int generateDotMatrix(string tittle, SubGraph* subgraph, bool debugMessage = tru
         if(debugMessage) cout<<" x Error al crear el .dot"<<endl;
         return -1;
     }
-}
-
-void drawPixelArt(string tittle, Layer* layer, bool debugMessage = true){
-    PixelGraph pixel_generator(tittle, "pixelArt_" + tittle);
-    if(debugMessage = true) cout<<"Creando Pixel art..."<<endl;
-    pixel_generator.addToContext(layer->pixelArt(18,18));
-    pixel_generator.generateNewFiles(false);
-    if (debugMessage = true) cout<<"PixelArt Creado!"<<endl;
 }
 
 void load_layers(){
@@ -269,7 +399,6 @@ void load_users(){
                 Image* img_ = ls.getByID(stoi(img));
                 if (!img_) continue;
                 user_->list_images.add(stoi(img), img_, bt.getGraph());
-
             }
             id++;
         }

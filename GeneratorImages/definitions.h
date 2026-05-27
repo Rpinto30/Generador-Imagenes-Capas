@@ -312,8 +312,8 @@ class Layer{
     }
 
     string pixelArt(int sizeX = 0, int sizeY = 0){
-        if (sizeX == 0) sizeX = sizeRows;
-        if (sizeY == 0) sizeY = sizeCols;
+        if (sizeX == 0) sizeX = sizeRows+1;
+        if (sizeY == 0) sizeY = sizeCols+1;
         string result = "subgraph " + tittle + "{\n";
 
         H_layer* currRow = rowH;
@@ -330,6 +330,14 @@ class Layer{
             currRow = currRow->next;
         }
         return result + "}";
+    }
+
+    int getHeight(){
+        return sizeRows;
+    }
+
+    int getWidth(){
+        return sizeCols;
     }
 
     void checkTree(){
@@ -569,13 +577,12 @@ class BST{
     void f_preOrden(Entity<T>* parent,std::string pre = "", std::string sub = ""){
         if (parent == nullptr) return;
 
-        if (parent->left || parent->right) {
-            std::cout<<pre<<"ID: "<<parent->id;
-            if (sub != "")
-            std::cout<<"| "<<sub<<": "<<parent->data->nickname<<std::endl;
-            else std::cout<<std::endl;
 
-        }
+        std::cout<<pre<<"ID: "<<parent->id;
+        if (sub != "")
+        std::cout<<"| "<<sub<<": "<<parent->data->nickname<<std::endl;
+        else std::cout<<std::endl;
+
         f_preOrden(parent->left, pre, sub);
         f_preOrden(parent->right, pre, sub);
     }
@@ -658,6 +665,11 @@ class BST{
                 found->data->nickname = nick;
                 std::cout<<std::endl<<pre<<"Se removio el usuario"<<std::endl;
         }
+
+    Entity<T>* getRoot(){
+        if (root) return root;
+        return nullptr;
+    }
 
 
     ~BST(){
@@ -780,6 +792,16 @@ public:
         return getIndex(id);
     }
 
+
+    void print_list(string pre = ""){
+        std::cout<<std::endl<<pre<<"Imagenes registradas en el sistema: "<<std::endl;
+        ImageBiNode* temp = getActual();
+        do {
+            std::cout<<pre<<"ID: "<<temp->id<<std::endl;
+            temp = temp->next;
+        } while (temp != head);
+    }
+
 };
 
 //Utilizado unicamente para tener la referencia de las imagenes por cada usuario y ahorrar su busqueda en toda la DLL
@@ -849,6 +871,10 @@ public:
             std::cout<<pre<<"Imagen: "<<temp->id<<std::endl;
             temp = temp->next;
         }
+    }
+
+    void delete_id(int id){
+        deleteNode(id);
     }
 };
 

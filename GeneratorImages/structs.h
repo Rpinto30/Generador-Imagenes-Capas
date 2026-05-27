@@ -160,6 +160,29 @@ class LinkedList{
         }
     }
 
+    void deleteNode(int id){
+
+        while (head && head->id == id) {
+            Node<T>* temp = head;
+            head = head->next;
+            delete temp;
+        }
+
+
+        Node<T>* temp = head;
+        while (temp && temp->next) {
+            if (temp->next->id == id) {
+                Node<T>* temp_2 = temp->next;
+                temp->next = temp->next->next;
+                delete temp_2;
+                break;
+            } else {
+                temp = temp->next;
+            }
+        }
+
+    }
+
 
     public:
         ~LinkedList(){
