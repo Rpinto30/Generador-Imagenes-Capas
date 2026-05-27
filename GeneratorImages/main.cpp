@@ -81,28 +81,29 @@ void userOptions(){
             cout<<"\t! Se ha creado el usuario y agregado al sistema!"<<endl; break;
         } else if (option == "2"){
              cout<<"\t---------------------------------"<<endl;
-             bt.print_preorden("\t");
+             bt.print_preorden("\t", "Usuario");
         } else if (option == "3"){
             int id;
             cout<<"\t---------------------------------"<<endl;
-            bt.print_preorden("\t");
+            bt.print_preorden("\t", "Usuario");
             cout<<"\t> Selecciona el id a eliminar: ";
             cin>>id;
             bt.delete_fromBST(id, "\t");
-        } else if (option == "4"){ //arreglar
-            int id; string nick;
+        } else if (option == "4"){
+            int id;
+            string nick;
             cout<<"\t---------------------------------"<<endl;
-            bt.print_preorden("\t");
-            cout<<"\t> Selecciona el id a eliminar: ";
+            bt.print_preorden("\t", "Usuario");
+            cout<<"\t> Selecciona el id a modificar: ";
             cin>>id;
             cout<<"\t> Nuevo nombre de usuario: ";
-            cin>>id;
+            cin>>nick;
             bt.updateName(id, nick, "\t");
         }
         else if (option == "5"){
             int id;
             cout<<"\t---------------------------------"<<endl;
-            bt.print_preorden("\t");
+            bt.print_preorden("\t", "Usuario");
             cout<<"\t> Selecciona el id del usuario: ";
             cin>>id;
             Entity<User>* user_ = bt.search(id);
@@ -112,7 +113,7 @@ void userOptions(){
         }else if (option == "6"){
             int id;
             cout<<"\t---------------------------------"<<endl;
-            bt.print_preorden("\t");
+            bt.print_preorden("\t", "Usuario");
             cout<<"\t> Selecciona el id del usuario: ";
             cin>>id;
             Entity<User>* user_ = bt.search(id);
@@ -134,7 +135,7 @@ void userOptions(){
         } else if (option == "7"){
             int id;
             cout<<"\t---------------------------------"<<endl;
-            bt.print_preorden("\t");
+            bt.print_preorden("\t", "Usuario");
             cout<<"\t> Selecciona el id del usuario: ";
             cin>>id;
             Entity<User>* user_ = bt.search(id);
@@ -244,6 +245,12 @@ void memoryOptions(){
             SubGraph graph_copy = ls.getOnlyImg(id);
             temp_file.getQueue()->add(&graph_copy);
             temp_file.getQueue()->add(bt_layers.getGraph());
+            generateDotFile(&temp_file, true);
+        } else if (option == "5"){
+            DotFile temp_file("Arbol_Usuarios",  "bst_users", "\nrankdir=TB; nodesep=0.5; ranksep=0.8; splines=ortho;\n");
+            SubGraph graph_copy = bt.getGraphOnlyRoot();
+            temp_file.getQueue()->add(&graph_copy);
+            //temp_file.getQueue()->add(bt.getGraph());
             generateDotFile(&temp_file, false);
         }
 

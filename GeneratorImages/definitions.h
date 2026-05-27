@@ -612,6 +612,12 @@ class BST{
 
     SubGraph * getGraph() { return &graph;}
 
+    SubGraph getGraphOnlyRoot() {
+        SubGraph graph_temp = graph;
+        graph_temp.removeKeyWord("img");
+        return graph_temp;
+    }
+
     void preOrden_graphviz(){
         graph.removeKeyWord("id=\"bst\"");
         setConnectionsGraphviz(root);
@@ -652,18 +658,24 @@ class BST{
             std::cout<<std::endl<<pre<<"No se encontro ese usuario"<<std::endl;
             return;
         }
-        remove(found, id);
+        graph.removeKeyWord(tittle_nodes + to_string(found->id));
+        root = remove(root, id);
+        preOrden_graphviz();
         std::cout<<std::endl<<pre<<"Se removio el usuario"<<std::endl;
     }
 
      void updateName(int id, string nick, string pre = ""){
             Entity<T>* found = search(id);
-            if (found == nullptr){
+            if (!found){
                 std::cout<<std::endl<<pre<<"No se encontro ese usuario"<<std::endl;
-                return;
-            }
+            } else{
                 found->data->nickname = nick;
-                std::cout<<std::endl<<pre<<"Se removio el usuario"<<std::endl;
+                graph.updateLineByCoincidence(
+                    "us_" + to_string(id) + "[label",
+                    "us_" + to_string(id) + "[label=\"" + nick + "\", shape=record, style=filled, fillcolor=white];");
+                std::cout<<std::endl<<pre<<"Se actualizo el usuario"<<std::endl;
+            }
+
         }
 
     Entity<T>* getRoot(){

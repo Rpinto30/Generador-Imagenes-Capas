@@ -77,6 +77,24 @@ namespace dotGenerator{
                 context = new_context;
             }
 
+
+            void updateLineByCoincidence(string keyWord, string replace_){
+                stringstream separator(context);
+                string temp;
+                string new_context;
+
+                while (getline(separator, temp, '\n')){
+                    size_t position = temp.find(keyWord);
+                    if (position != string::npos)  {
+                        cout<<"nnmms";
+                        new_context+=replace_+"\n";
+                        continue;
+                    }
+                    new_context+=temp+"\n";
+                }
+                context = new_context;
+            }
+
              void removeKeyWord(string keyWord){
                 stringstream separator(context);
                 string temp;
