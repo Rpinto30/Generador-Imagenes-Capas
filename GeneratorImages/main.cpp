@@ -152,8 +152,6 @@ void userOptions(){
                 continue;
             }
         }
-
-
     } while(option != "-1");
 }
 
@@ -188,11 +186,22 @@ void imagesOptions(){
     } while(option != "-1");
 }
 
+void generateDotFile(DotFile* file, bool delete_file, bool debugMessage = true){
+    int t = file->generateNewFiles(delete_file);
+    if (t == 0){
+        if(debugMessage) cout<<" ! .dot generador con exito"<<endl;
+
+    } else if (t == 2) {
+         if(debugMessage) cout<<" ! .ya generado"<<endl;
+    } else{
+        if(debugMessage) cout<<" x Error al crear el .dot"<<endl;
+    }}
+
 void memoryOptions(){
     string option;
     do{
         cout<<"-------------------------------------------------------------------------"<<endl;
-        cout<<"\t1) Mostrar Imagenes"<<endl;
+        cout<<"\t1) Mostrar Lista Circular Doble de Imagenes"<<endl;
         cout<<"\t2) Mostrar Arbol de capas"<<endl;
         cout<<"\t3) Mostrar capa"<<endl;
         cout<<"\t4) Mostrar Imagen y arbol de capas"<<endl;
@@ -200,6 +209,44 @@ void memoryOptions(){
         cout<<"\t-1) Volver"<<endl;
         cout<<"\t> Elige una de las opciones: ";
         cin>>option;
+
+        if (option == "1"){
+            DotFile temp_file("Lista_Doble_Circular_Imagenes",  "dlc_memory", "\nrankdir=TB; nodesep=0.5; ranksep=0.8; splines=ortho;\n");
+            SubGraph graph_copy = ls.getOnlyGraph();
+            temp_file.getQueue()->add(&graph_copy);
+            generateDotFile(&temp_file, true);
+        } else if (option == "2"){
+            DotFile temp_file("Arbol_Capas",  "bst_layers_memory", "\nrankdir=TB; nodesep=0.5; ranksep=0.8; splines=ortho;\n");
+            temp_file.getQueue()->add(bt_layers.getGraph());
+            generateDotFile(&temp_file, true);
+        } else if (option == "3"){
+            int id;
+            cout<<"\t---------------------------------"<<endl;
+            bt_layers.print_preorden("\t");
+            cout<<"\t> Selecciona el id de la capa: ";
+            cin>>id;
+
+            Entity<Layer_struct>* ent = bt_layers.search(id);
+            if (!ent) continue;
+            Layer_struct* layer_ = ent->data;
+
+            DotFile temp_file("Capa_"+to_string(id),  "layer_"+to_string(id), "\nrankdir=TB; nodesep=0.5; ranksep=0.8; splines=ortho;\n");
+            temp_file.getQueue()->add(layer_->layer->getGraph());
+            generateDotFile(&temp_file, true);
+        }  else if (option == "4"){
+            int id;
+            cout<<"\t---------------------------------"<<endl;
+            ls.print_list("\t");
+            cout<<"\t> Selecciona el id de la imagen: ";
+            cin>>id;
+
+            DotFile temp_file("Arbol_Capas_e_Imagen",  "bst_layers_image_memory", "\nrankdir=TB; nodesep=0.5; ranksep=0.8; splines=ortho;\n");
+            SubGraph graph_copy = ls.getOnlyImg(id);
+            temp_file.getQueue()->add(&graph_copy);
+            temp_file.getQueue()->add(bt_layers.getGraph());
+            generateDotFile(&temp_file, false);
+        }
+
     } while(option != "-1");
 }
 
@@ -261,6 +308,7 @@ void genImageByUser(int id){
 
 void genImageByLayer(int id){
     Entity<Layer_struct>* ent = bt_layers.search(id);
+    if (!ent) return;
     Layer_struct* layer_ = ent->data;
 
     cout<<"\tSe esta generando tu capa..."<<endl;
@@ -355,6 +403,8 @@ int generateDotMatrix(string tittle, SubGraph* subgraph, bool debugMessage = tru
     }
 }
 
+
+/*CARGA MASIVA POR AUTOMATAS*/
 void load_layers(){
     try {
         LinkedList<BlockCap> bloques = loadCap("capas.cap");
@@ -428,7 +478,3 @@ int generateDot(bool debugMessage = false){
         return -1;
     }
 }
-
-
-// Graphviz
-// Mermaid.js

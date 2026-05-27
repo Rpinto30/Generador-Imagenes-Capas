@@ -90,6 +90,35 @@ namespace dotGenerator{
                 context = new_context;
             }
 
+            void removeKeyWord(string keyWord, string notContain){
+                stringstream separator(context);
+                string temp;
+                string new_context;
+
+                while (getline(separator, temp, '\n')){
+                    size_t position = temp.find(keyWord);
+                    size_t no = temp.find(notContain);
+                    if (position != string::npos && no == string::npos)  continue;
+                    new_context+=temp+"\n";
+                }
+                context = new_context;
+            }
+
+            void removeKeyWord(string keyWord, string notContain, string notContain2){
+                stringstream separator(context);
+                string temp;
+                string new_context;
+
+                while (getline(separator, temp, '\n')){
+                    size_t position = temp.find(keyWord);
+                    size_t no = temp.find(notContain);
+                     size_t no2 = temp.find(notContain2);
+                    if (position != string::npos && no == string::npos && no2 == string::npos)  continue;
+                    new_context+=temp+"\n";
+                }
+                context = new_context;
+            }
+
               void clearAllConections(string condition){
                 stringstream separator(context);
                 string temp;
@@ -208,6 +237,18 @@ namespace dotGenerator{
                 context = new_context;
             }
 
+            void removeAllConections(string keep, string keep2){
+                stringstream separator(context);
+                string temp;
+                string new_context;
+
+                while (getline(separator, temp, '\n')){
+                    if (temp.find("->") != string::npos && temp.find(keep) == string::npos && temp.find(keep2) == string::npos) {continue;}
+                    else {new_context+=temp+"\n";}
+                }
+                context = new_context;
+            }
+
 
             void removeBiNode(){
                 //removerNodos
@@ -269,21 +310,30 @@ namespace dotGenerator{
             SubgraphQueue queue_subgraph;
 
             void constructFile(const string filename) {
+                 if (fs::create_directories("Memory")) {
+                    cout << "! Carpeta creada exitosamente: Memory" << endl;
+                }
                 ofstream outFile(filename);
 
                 if (!outFile) return;
 
                 outFile << context;
                 outFile.close();
-                //cout<<"Archivo: "<<filename<<"creado"<<endl;
             }
 
-            int generateFile(){
-                constructFile("graph"+tittle+".dot");
+            int generateFile(bool deletefile = false){
+                constructFile("Memory/"+tittle+".dot");
 
-                string result_str = "dot -Tpng graph" + tittle + ".dot -o "+output_file_tittle+".png";
-                //cout<<result_str<<endl;
+                string result_str = "dot -Tpng Memory/" + tittle + ".dot -o Memory/"+output_file_tittle+".png";
+
                 int result = system(result_str.c_str());
+
+                if (deletefile){
+                    string name = "Memory/"+tittle+".dot";
+                    const char* const_name = name.c_str();
+                    remove(const_name);
+                }
+
                 return result;
             }
 
@@ -309,10 +359,10 @@ namespace dotGenerator{
 
             }
 
-            int generateNewFiles(){
+            int generateNewFiles(bool deleteFiles=false){
                 //queue_subgraph.print();
 
-                return (updateSubGraphs() == 0) ? generateFile() : 2;
+                return (updateSubGraphs() == 0) ? generateFile(deleteFiles) : 2;
 
             }
 
@@ -330,7 +380,7 @@ namespace dotGenerator{
 
             void constructFile(const string filename) {
                 if (fs::create_directories("ResultImages")) {
-                    cout << "Carpeta creada exitosamente: ResultImages" << endl;
+                    cout << "! Carpeta creada exitosamente: ResultImages" << endl;
                 }
                 ofstream outFile(filename);
 

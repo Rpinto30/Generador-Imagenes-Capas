@@ -726,7 +726,7 @@ private:
             graph.simpleConnectNode(temp->nameNode, temp->next->nameNode, "dir=both ,id=\"principalimg\"");
             temp = temp->next;
         } while (temp != head);
-        graph.insertInContext(rank_+"}");
+        graph.insertInContext(rank_+"}\n");
     }
 
     ImageBiNode* createNode(int id,Image* data){
@@ -753,7 +753,24 @@ private:
         }*/
     }
 public:
-    SubGraph * getGraph() { return &graph;}
+    SubGraph * getGraph() {
+        return &graph;
+    }
+
+    SubGraph getOnlyGraph(){
+        SubGraph graph_temp = graph;
+        graph_temp.removeKeyWord("bst_img");
+        return graph_temp;
+    }
+
+    SubGraph getOnlyImg(int id){
+        SubGraph graph_temp = graph;
+        graph_temp.removeAllConections("bst_img", "\"con_img_"+to_string(id)+"\"");
+        graph_temp.removeKeyWord("#7FBA85", "img_"+to_string(id), "i"+to_string(id));
+        graph_temp.removeKeyWord("#9999C7", "img_"+to_string(id), "i"+to_string(id));
+        graph_temp.removeKeyWord("rank=same");
+        return graph_temp;
+    }
 
     ListImages (string tittle, string tittle_nodes, string color_nodes, string tittle_subNodes) : tittle(tittle), tittle_nodes(tittle_nodes), color_nodes(color_nodes), tittle_subNodes(tittle_subNodes) {
         graph.changeName(tittle);
@@ -776,16 +793,16 @@ public:
         temp_node->nameNode = subNode_name;
               if (node->data->layers.isEmpty()) {
             //conexion inicial
-            graph.simpleConnectNode(node->nameNode, subNode_name, "color=\"#3E444D\"");
+            graph.simpleConnectNode(node->nameNode, subNode_name, "color=\"#3E444D\", id=\"con_img_"+to_string(node->id)+"\"");
         } else{
             //concatenar LL
-            graph.simpleConnectNode(node->data->layers.getLast()->nameNode, subNode_name, "color=\"#3E444D\"");
+            graph.simpleConnectNode(node->data->layers.getLast()->nameNode, subNode_name, "color=\"#3E444D\", id=\"con_img_"+to_string(node->id)+"\"");
         }
         node->data->layers.insert_node(temp_node);
 
         string configNode = "shape=record, style=filled, fillcolor=\"#9999C7\"";
         graph.insertNode_extend(subNode_name, configNode);
-        graph.simpleConnectNode(subNode_name, temp_node->data->name, "color=\"#3E444D\", style=dotted");
+        graph.simpleConnectNode(subNode_name, temp_node->data->name, "color=\"#3E444D\", style=dotted, id=\"bst_img\"");
     }
 
     Image* getByID(int id){

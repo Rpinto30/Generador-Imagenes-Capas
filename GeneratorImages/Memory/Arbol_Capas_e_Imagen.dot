@@ -1,0 +1,32 @@
+digraph Arbol_Capas_e_Imagen {
+label=Arbol_Capas_e_Imagen
+rankdir=TB; nodesep=0.5; ranksep=0.8; splines=ortho;
+subgraph cluster_Imagenes{
+label="Imagenes"
+style = "filled,rounded"; ordering=out;
+img_2[label="img_2", shape=box, style=filled, fillcolor="#7FBA85"];
+img_2 -> i2_lyr_2 [color="#7FBA85", color="#3E444D", id="con_img_2"];
+i2_lyr_2[label="i2_lyr_2"shape=record, style=filled, fillcolor="#9999C7"];
+i2_lyr_2 -> lyr_2 [color="#7FBA85", color="#3E444D", style=dotted, id="bst_img"];
+i2_lyr_2 -> i2_lyr_1 [color="#7FBA85", color="#3E444D", id="con_img_2"];
+i2_lyr_1[label="i2_lyr_1"shape=record, style=filled, fillcolor="#9999C7"];
+i2_lyr_1 -> lyr_1 [color="#7FBA85", color="#3E444D", style=dotted, id="bst_img"];
+i2_lyr_1 -> i2_lyr_3 [color="#7FBA85", color="#3E444D", id="con_img_2"];
+i2_lyr_3[label="i2_lyr_3"shape=record, style=filled, fillcolor="#9999C7"];
+i2_lyr_3 -> lyr_3 [color="#7FBA85", color="#3E444D", style=dotted, id="bst_img"];
+
+}
+
+subgraph cluster_Capas{
+label="Capas"
+style = "filled,rounded"; ordering=out;
+lyr_1[label="lyr_1", shape=box, style=filled, fillcolor="#FF333340"];
+lyr_2[label="lyr_2", shape=box, style=filled, fillcolor="#FF333340"];
+lyr_3[label="lyr_3", shape=box, style=filled, fillcolor="#FF333340"];
+lyr_2 -> lyr_1 [color="#FF333340", id="bst"];
+lyr_2 -> lyr_3 [color="#FF333340", id="bst"];
+
+}
+
+
+}
