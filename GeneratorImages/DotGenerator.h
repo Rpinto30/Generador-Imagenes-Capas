@@ -86,7 +86,6 @@ namespace dotGenerator{
                 while (getline(separator, temp, '\n')){
                     size_t position = temp.find(keyWord);
                     if (position != string::npos)  {
-                        cout<<"nnmms";
                         new_context+=replace_+"\n";
                         continue;
                     }

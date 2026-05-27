@@ -5,9 +5,11 @@ subgraph cluster_Usuarios{
 label="Usuarios"
 style = "filled,rounded"; ordering=out;
 us_1[label="userM", shape=box, style=filled, fillcolor=white];
+us_2[label="userB", shape=box, style=filled, fillcolor=white];
 us_3[label="userA", shape=box, style=filled, fillcolor=white];
 us_4[label="userY", shape=box, style=filled, fillcolor=white];
-us_3 -> us_1 [color=white, id="bst"];
+us_2 -> us_1 [color=white, id="bst"];
+us_2 -> us_3 [color=white, id="bst"];
 us_3 -> us_4 [color=white, id="bst"];
 
 }

@@ -251,7 +251,7 @@ void memoryOptions(){
             SubGraph graph_copy = bt.getGraphOnlyRoot();
             temp_file.getQueue()->add(&graph_copy);
             //temp_file.getQueue()->add(bt.getGraph());
-            generateDotFile(&temp_file, false);
+            generateDotFile(&temp_file, true);
         }
 
     } while(option != "-1");
@@ -414,7 +414,7 @@ int generateDotMatrix(string tittle, SubGraph* subgraph, bool debugMessage = tru
 /*CARGA MASIVA POR AUTOMATAS*/
 void load_layers(){
     try {
-        LinkedList<BlockCap> bloques = loadCap("capas.cap");
+        LinkedList<BlockCap> bloques = loadCap("data/capas.cap");
         for (BlockCap& bloque : bloques) {
             Layer_struct* layer = new Layer_struct(new Layer("l"+ bloque.id));
             for (DataCap& fila : *(bloque.rows)) {
@@ -431,7 +431,7 @@ void load_layers(){
 
 void load_images(){
      try {
-        LinkedList<BlockIm> bloques = loadIm("imagenes.im");
+        LinkedList<BlockIm> bloques = loadIm("data/imagenes.im");
         for (BlockIm& bloque : bloques) {
             Image* image = new Image(bloque.id);
             ls.add(stoi(bloque.id), image);
@@ -446,7 +446,7 @@ void load_images(){
 
 void load_users(){
     try {
-        LinkedList<UserUsr> users = loadUsr("usuarios.usr");
+        LinkedList<UserUsr> users = loadUsr("data/usuarios.usr");
         int id = 1;
         for (UserUsr& user : users) {
             User* user_ = new User("us_" + to_string(id));
