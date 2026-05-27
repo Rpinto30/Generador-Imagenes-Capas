@@ -4,13 +4,14 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <cstdio>
 #include <filesystem>
 #include "structs.h"
-
 
 namespace dotGenerator{
     using namespace std;
     using namespace st;
+    namespace fs = std::filesystem;
 
     class SubGraph{
         private:
@@ -328,6 +329,9 @@ namespace dotGenerator{
             string subgraphs;
 
             void constructFile(const string filename) {
+                if (fs::create_directories("ResultImages")) {
+                    cout << "Carpeta creada exitosamente: ResultImages" << endl;
+                }
                 ofstream outFile(filename);
 
                 if (!outFile) return;
@@ -336,11 +340,16 @@ namespace dotGenerator{
                 outFile.close();
             }
 
-            int generateFile(){
-                constructFile("pixel_art_"+tittle+".dot");
+            int generateFile(bool deletefile = false){
+                constructFile("ResultImages/"+tittle+".dot");
 
-                string result_str = "dot -Kneato -Tpng pixel_art_" + tittle + ".dot -o "+output_file_tittle+".png";
+                string result_str = "dot -Kneato -Tpng ResultImages/" + tittle + ".dot -o ResultImages/"+output_file_tittle+".png";
                 int result = system(result_str.c_str());
+                if (deletefile){
+                    string name = "ResultImages/"+tittle+".dot";
+                    const char* const_name = name.c_str();
+                    remove(const_name);
+                }
                 return result;
             }
 
@@ -351,7 +360,7 @@ namespace dotGenerator{
 
             void resetContext() {
                 context = "digraph resultPixelArt {}";
-                generateFile();
+                generateFile(false);
             }
 
             void addToContext(string st){
@@ -371,10 +380,10 @@ namespace dotGenerator{
 
             }
 
-            int generateNewFiles(){
+            int generateNewFiles(bool deleteFile){
                 //queue_subgraph.print();
 
-                return (updateSubGraphs() == 0) ? generateFile() : 2;
+                return (updateSubGraphs() == 0) ? generateFile(deleteFile) : 2;
 
             }
 

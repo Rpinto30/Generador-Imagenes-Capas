@@ -32,6 +32,9 @@ void load_layers();
 void load_images();
 void load_users();
 
+void genImageByUser(int id);
+void genImageByLayer(int id);
+
 int massive(bool message = true){
     //graphIntoDotFile();
      if (message) cout<<"Cargado archivos..."<<endl;
@@ -72,6 +75,25 @@ void userOptions(){
             user_->nickname = name;
             bt.insert(last_id_user, user_, user_->nickname);
             cout<<"\t! Se ha creado el usuario y agregado al sistema!"<<endl; break;
+        } else if (option == "2"){
+             cout<<"\t---------------------------------"<<endl;
+             bt.print_preorden("\t");
+        } else if (option == "3"){
+            int id;
+            cout<<"\t---------------------------------"<<endl;
+            bt.print_preorden("\t");
+            cout<<"\t> Selecciona el id a eliminar: ";
+            cin>>id;
+            bt.delete_fromBST(id, "\t");
+        } else if (option == "4"){ //arreglar
+            int id; string nick;
+            cout<<"\t---------------------------------"<<endl;
+            bt.print_preorden("\t");
+            cout<<"\t> Selecciona el id a eliminar: ";
+            cin>>id;
+            cout<<"\t> Nuevo nombre de usuario: ";
+            cin>>id;
+            bt.updateName(id, nick, "\t");
         }
 
     } while(option != "-1");
@@ -87,6 +109,22 @@ void imagesOptions(){
         cout<<"\t-1) Volver"<<endl;
         cout<<"\t> Elige una de las opciones: ";
         cin>>option;
+
+        if (option == "1"){
+            int id;
+            cout<<"\t---------------------------------"<<endl;
+            bt.print_preorden("\t", "Usuario");
+            cout<<"\t> Selecciona el id del usuario: ";
+            cin>>id;
+            genImageByUser(id);
+        } else if (option == "2"){
+            int id;
+            cout<<"\t---------------------------------"<<endl;
+            bt_layers.print_preorden("\t", "");
+            cout<<"\t> Selecciona el id del usuario: ";
+            cin>>id;
+            genImageByLayer(id);
+        }
     } while(option != "-1");
 }
 
@@ -129,6 +167,38 @@ int main()
     return 0;
 }
 
+/*METODOS PARA GENERAR IMAGENES*/
+void genImageByUser(int id){
+    Entity<User>* ent = bt.search(id);
+    if (!ent) return;
+    User* user = ent->data;
+    cout<<"-------------------------------------------------"<<endl;
+    user->list_images.printData("\t");
+    int id_image;
+    cout<<"\t> Ingresa ID de la imagen que quieres dibujar: ";
+    cin>>id_image;
+    Image* img = user->list_images.getImageIndex(id_image);
+    Node<Layer_struct>* temp = img->layers.getHead();
+
+    if (!temp) return;
+    PixelGraph pixel_generator("pixel_art_de_"+user->nickname, "pixelArt_" + user->nickname);
+    int img_count = 0;
+    while(temp){
+        cout<<"\tCargando capa "<<to_string(++img_count)<<"..."<<endl;
+        pixel_generator.addToContext(temp->data->layer->pixelArt(18,18));
+        temp = temp->next;
+    }
+
+
+    pixel_generator.generateNewFiles(true);
+    cout<<"\t\n ! PixelArt de "<<user->nickname<<" ha sido creado en la carpeta ResultImages!"<<endl;
+}
+
+void genImageByLayer(){
+
+}
+
+
 int generateDotMatrix(string tittle, SubGraph* subgraph, bool debugMessage = true){
     DotFile temp_file(tittle,  tittle, "\nrankdir=TB; nodesep=0.5; ranksep=0.8; splines=ortho;\n");
     temp_file.getQueue()->add(subgraph);
@@ -151,7 +221,7 @@ void drawPixelArt(string tittle, Layer* layer, bool debugMessage = true){
     PixelGraph pixel_generator(tittle, "pixelArt_" + tittle);
     if(debugMessage = true) cout<<"Creando Pixel art..."<<endl;
     pixel_generator.addToContext(layer->pixelArt(18,18));
-    pixel_generator.generateNewFiles();
+    pixel_generator.generateNewFiles(false);
     if (debugMessage = true) cout<<"PixelArt Creado!"<<endl;
 }
 

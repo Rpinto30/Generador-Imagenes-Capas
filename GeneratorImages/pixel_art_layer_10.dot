@@ -1,7 +1,0 @@
-graph resultPixelArt { 
-graph [splines=false]; 
-node [shape=square, width=1, height=1, label="",fixedsize=true, margin=0, style=filled, fillcolor=white]; 
-edge [style=invis];subgraph l10{
-l10_717 [fillcolor="#F0D000", color=none, pos="7,17!"];
-}
-}

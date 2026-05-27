@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1779777914 source:c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto-final-edd\generadorimagenes\generatorimages\main.cpp
+1779845983 source:c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto-final-edd\generadorimagenes\generatorimages\main.cpp
 	<iostream>
 	<chrono>
 	"structs.h"
@@ -9,18 +9,19 @@
 	"automata_im.h"
 	"automata_usr.h"
 
-1779618196 c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto-final-edd\generadorimagenes\generatorimages\structs.h
+1779841524 c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto-final-edd\generadorimagenes\generatorimages\structs.h
 	<iostream>
 	<string>
 
-1779619076 c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto-final-edd\generadorimagenes\generatorimages\dotgenerator.h
+1779845172 c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto-final-edd\generadorimagenes\generatorimages\dotgenerator.h
 	<iostream>
 	<fstream>
 	<string>
+	<cstdio>
 	<filesystem>
 	"structs.h"
 
-1779778359 c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto-final-edd\generadorimagenes\generatorimages\definitions.h
+1779846106 c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto-final-edd\generadorimagenes\generatorimages\definitions.h
 	<iostream>
 	"structs.h"
 	"dotGenerator.h"

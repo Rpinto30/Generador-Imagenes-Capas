@@ -358,6 +358,7 @@ typedef struct Layer_struct{
     int id = 0;
     Layer* layer;
     std::string name = "";
+    std::string nickname;
     Layer_struct(Layer* layer) : layer (layer) {}
 } Layer_struct;
 
@@ -565,14 +566,18 @@ class BST{
         delete parent;
     }
 
-    void f_preOrden(Entity<T>* parent){
+    void f_preOrden(Entity<T>* parent,std::string pre = "", std::string sub = ""){
         if (parent == nullptr) return;
 
-        if (parent->left || parent->right) std::cout<<std::endl<<parent->id<<std::endl;
-        if (parent->left) std::cout<<" Izq: "<<parent->left->id<<" ";
-        if (parent->right) std::cout<<" Der: "<<parent->right->id<<" ";
-        f_preOrden(parent->left);
-        f_preOrden(parent->right);
+        if (parent->left || parent->right) {
+            std::cout<<pre<<"ID: "<<parent->id;
+            if (sub != "")
+            std::cout<<"| "<<sub<<": "<<parent->data->nickname<<std::endl;
+            else std::cout<<std::endl;
+
+        }
+        f_preOrden(parent->left, pre, sub);
+        f_preOrden(parent->right, pre, sub);
     }
 
     /*void bsf(){
@@ -616,13 +621,13 @@ class BST{
         return found;
     }
 
-    void print_preorden(){
+    void print_preorden(std::string pre, std::string sub = ""){
         if (root == nullptr){
-            std::cout<<"Nada que mostrar en el BST"<<std::endl;
+            std::cout<<pre<<"Nada que mostrar"<<std::endl;
             return;
         }
-        std::cout<<"En preornde:"<<std::endl;
-        f_preOrden(root);
+        std::cout<<pre<<"Generado en recorrido Preorden:"<<std::endl;
+        f_preOrden(root, pre, sub);
     }
 
     void print_bsf(){
@@ -634,6 +639,25 @@ class BST{
         //bsf();
     }
 
+    void delete_fromBST(int id, string pre = ""){
+        Entity<T>* found = search(id);
+        if (found == nullptr){
+            std::cout<<std::endl<<pre<<"No se encontro ese usuario"<<std::endl;
+            return;
+        }
+        remove(found, id);
+        std::cout<<std::endl<<pre<<"Se removio el usuario"<<std::endl;
+    }
+
+     void updateName(int id, string nick, string pre = ""){
+            Entity<T>* found = search(id);
+            if (found == nullptr){
+                std::cout<<std::endl<<pre<<"No se encontro ese usuario"<<std::endl;
+                return;
+            }
+                found->data->nickname = nick;
+                std::cout<<std::endl<<pre<<"Se removio el usuario"<<std::endl;
+        }
 
 
     ~BST(){
@@ -803,11 +827,28 @@ public:
 
     }
 
+    Node<Image>* getHead(){
+        if (head != nullptr) return head;
+        return nullptr;
+    }
+
     void add(int id,Image* data, SubGraph* subgraph){
         if (graph != subgraph) setSubgraph(subgraph);
         ImageNode* new_node = createNode(id, data);
         this->insert(new_node);
         //setRankGraphviz();
+    }
+
+    Image* getImageIndex(int id){
+        return getIndex(id);
+    }
+
+    void printData(string pre=""){
+        Node<Image>* temp = head;
+        while(temp){
+            std::cout<<pre<<"Imagen: "<<temp->id<<std::endl;
+            temp = temp->next;
+        }
     }
 };
 

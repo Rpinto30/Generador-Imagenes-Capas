@@ -1,26 +1,42 @@
-Capas -> Matriz dispersa
+Faltante:
 
-CREAR CRUD DE BST{
-    CREATE - LISTO
-    READ - Listo
-    UPDATE - LISTO
-    DELETE - no realizado
+- Crear interfaz para los usuarios{
+CREAR
+VERLOS
+ELIMINARLOS
+MODIFICAR
 }
 
-Almacenar capas -> BST LISTO
-Almacenar usuarios -> BST LISTO
 
-Imagenes -> DoubleLinkedList (recrear doubleLinkedList){
-    Listado de capas -> Queue (recrear Queues)
+
+- Agregar imagenes nuevas a usuarios por la interfaz (id unicos)
+- Eliminar imagenes (buscar usuario, id de la imagen y puff, actualizar lista doble)
+
+- Generar imagenes - Por capa{
+    ingresar id
+    buscar en el arbol y graficar
 }
 
-------------------------------------------------------------
-<h1>GRAPHVIZ<h1>
-Crear arboles
-Crear double Linked list
-Crear queue dentro del mismo cluster de images
-Crear conexiones entre clusters
-------------------------------------------------------------
-CARGA MASIVA DE DATOS
-Aun no tengo pta idea xd
+- Generar imagenes - Por usuario{
+    ingresar id usuario
+    elefir imagen y graficar segun la cola
+}
+- Generar imagenes (según recorrido, post...)
 
+
+GRAFICAR LA MEMORIA:
+
+- Mostrar la lista circular doble
+
+- Mostrar Arbol de capas
+
+- Ver capa (la matriz)
+
+- Mostrar Imagen y arbol de capas
+
+- Mostrar arbol de usuarios
+
+
+
+
+PUTA MADRE ERA CIRCULAR DOBLEMENTE ENLAZADA - LISTO

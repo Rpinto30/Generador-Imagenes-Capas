@@ -190,6 +190,12 @@ class LinkedList{
             else return true;
         }
 
+
+        Node<T>* getHead(){
+            if (head) return head;
+            return nullptr;
+        }
+
         Node<T>* getLast(){
             if (head == nullptr) return nullptr;
 
