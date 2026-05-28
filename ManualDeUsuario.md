@@ -16,6 +16,8 @@ id_unico {
     id_capa_existente, ..., id_capa_existente
 }
 
+Para la ejecución de la aplicación, se debe de dirigir a la carpeta GeneradorImagenes y ejecuatar el archivo app.exe
+
 * <b><H3>ARCHIVO usuarios.usr</H3></b>
 nombreUsuario: id_imagen_existente, ..., id_capa_existente;
 
