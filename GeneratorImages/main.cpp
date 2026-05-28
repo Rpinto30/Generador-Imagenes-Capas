@@ -314,10 +314,9 @@ void genImageByUser(int id){
 }
 
 void genImageByLayer(int id){
-    Entity<Layer_struct>* ent = bt_layers.search(id);
+     Entity<Layer_struct>* ent = bt_layers.search(id);
     if (!ent) return;
     Layer_struct* layer_ = ent->data;
-
     cout<<"\tSe esta generando tu capa..."<<endl;
     PixelGraph pixel_generator("capa_" + to_string(id), "capa_" + to_string(id));
     pixel_generator.addToContext(layer_->layer->pixelArt());

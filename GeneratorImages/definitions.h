@@ -322,9 +322,9 @@ class Layer{
         while(currRow != nullptr){
             Pixel* temp = currRow->first;
             while (temp != nullptr){
-                string row_ = to_string(abs(temp->row - sizeX));
+                string row_ = to_string(abs(temp->row-sizeX));
                 string col_ = to_string(temp->column);
-                result += tittle +"_"+ col_ + row_ + " [fillcolor=\""+ temp->color+"\", color=none, pos=\""+ col_ +","+ row_ +"!\"];\n";
+                result += tittle +"_"+ col_ + "_" + row_ + " [fillcolor=\""+ temp->color+"\", color=none, pos=\""+ col_ +","+ row_ +"!\"];\n";
                 temp = temp->right;
             }
             currRow = currRow->next;
