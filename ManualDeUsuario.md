@@ -54,4 +54,41 @@ Se solicita un ID de usuario y luego se listan todas las imagenes que están reg
 Se solicita el ID de un usuario y luego el ID de una de las imagenes que posee el usuario, si el ID no existe entre las imagenes del usuario el sistema solo lo rechazará. Esta opción no elimina la imagen del sistema, solo le quita la dependencia al usuario de la imagen.
 
 <H2>GENERACIÓN DE IMAGENES</H2>
+![menu_imagenes] (ImgManual/menu_imagenes.png)
+
+En este apartado podemos generar las imagenes pixel art, todos los resultado son almacenados en formato .png en la carpeta de ruta "GeneratorImages/ResultImages", a continuación se listan las opciones mostradas:
+
+* <b><H3>1) GENERAR IMAGEN POR USUARIO</H3></b>
+Se solicita el ID de un usuario registrado al sistema, luego, se listan las imagenes que tiene asignado a su nombre, solicitandole al usuario ingresar el ID de la imagen que desea generar, una vez seleccionado se comenzará a generar, la forma en la que se agregarn las capas de la imagane es siguiendo un método FIFO (First In First Out), el sistema informa el orden en el que se generan las capas.
+
+* <b><H3>2) GENERAR IMAGEN POR CAPAS</H3></b>
+Se listan y se le solicita al usuario ingresar el ID de una capa ya registrada al sistema, luego el sistema procederá a generar la capa única.
+
+* <b><H3>3) GENERAR POR RECORRIDO</H3></b>
+Las capas se guardan en un ARBOL BINARIO DE BUSQUEDA, el cual se puede recorrer por completo de 3 formas: postorden, inorden y preorden. El sistema hara elegir al usuario sobre alguna de estas tres opciones, una vez seleccionada el sistema seleccionará las capas según el recorrido y generará la imagen.
+
 <H2>GESTIONAR LA MEMORIA</H2>
+![menu_memoria] (ImgManual/menu_memoria.png)
+
+En este apartado se dan las opciones al usuario para gestionar la memoria que está utilizando la aplicación, esto se hace por medio de la herramienta graphviz, la cual genera imagenes en la carpeta de ruta "GeneratorImages/Memory", a continuación se listan las opciones mostradas:
+
+
+* <b><H3>1) MOSTRAR LISTA CIRCULAR DOBLE DE IMAGENES</H3></b>
+Se genera una imagen que muestra como se almacenan las imagenes en el sistema, además se muestra como se alamacenan todas las capas que posee una imagen.
+
+* <b><H3>2) MOSTRAR ARBOL DE CAPAS</H3></b>
+Muestra el ARBOL BINARIO DE BUSQUEDA en el cual se almacenan las capas del sistema.
+
+* <b><H3>3) MOSTRAR CAPA</H3></b>
+Se le solicita al usuario el ID de una capa previamente insertada al sistema, luego muestra un grafico tipo matriz, donde se representan como nodos todos los pixeles de la capa seleccionado; Muestra las filas, columnas y el color de cada pixel.
+
+* <b><H3>4) MOSTRAR IMAGEN Y ARBOL DE CAPAS</H3></b>
+Se solicita al usuario el ID de una imagen previamnte insertada al sistema, luego se genera el nodo de la imagen seleccionada junto a las capas que utiliza, esto es acompañado con el arbol binario de busqueda, donde se muestran las dependencias de ambas estructuras utilizadas.
+
+* <b><H3>5) MOSTRAR ARBOL DE USUARIOS</H3></b>
+Muestra el ARBOL BINARIO DE BUSQUEDA en el cual se almacenan los usuarios del sistema.
+
+
+
+
+
