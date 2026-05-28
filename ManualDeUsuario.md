@@ -20,7 +20,7 @@ id_unico {
 nombreUsuario: id_imagen_existente, ..., id_capa_existente;
 
 <H2>INTERFAZ Y MENÚ PRINCIPAL</H2>
-![menu_principal] (ImgManual/menu_principal.png)
+<img width="793" height="137" alt="menu_principal" src="https://github.com/user-attachments/assets/52b60bb9-0aae-4cfc-8042-9cc88eb9fc07" />
 
 El menú principal lista las opciones mostradas, catalogando cada opción según su funcionalidad, si deseas salir del sistema puedes seleccionar 0 en el menú principal, 0 es el caracter por defecto para salir del menú actual. El sistema sigue la siguiente simbologia:
 
@@ -29,7 +29,7 @@ El menú principal lista las opciones mostradas, catalogando cada opción según
 * >: Solicitud de entrada por parte del usuario
 
 <H2>OPCIONES DE USUARIO</H2>
-![menu_usuario] (ImgManual/menu_usuario.png)
+<img width="704" height="200" alt="menu_usuario" src="https://github.com/user-attachments/assets/3241c816-aade-454a-95be-a27fdaafaa99" />
 
 El menú presenta las opciones principales para gestionar los usuario, a continuación se describe cada una de las opciones:
 * <b><H3>1) CREAR UN NUEVO USUARIO</H3></b>
@@ -54,7 +54,7 @@ Se solicita un ID de usuario y luego se listan todas las imagenes que están reg
 Se solicita el ID de un usuario y luego el ID de una de las imagenes que posee el usuario, si el ID no existe entre las imagenes del usuario el sistema solo lo rechazará. Esta opción no elimina la imagen del sistema, solo le quita la dependencia al usuario de la imagen.
 
 <H2>GENERACIÓN DE IMAGENES</H2>
-![menu_imagenes] (ImgManual/menu_imagenes.png)
+<img width="703" height="97" alt="menu_imagen" src="https://github.com/user-attachments/assets/25eda90d-2eb4-4175-9217-2919b22f97d2" />
 
 En este apartado podemos generar las imagenes pixel art, todos los resultado son almacenados en formato .png en la carpeta de ruta "GeneratorImages/ResultImages", a continuación se listan las opciones mostradas:
 
@@ -68,7 +68,7 @@ Se listan y se le solicita al usuario ingresar el ID de una capa ya registrada a
 Las capas se guardan en un ARBOL BINARIO DE BUSQUEDA, el cual se puede recorrer por completo de 3 formas: postorden, inorden y preorden. El sistema hara elegir al usuario sobre alguna de estas tres opciones, una vez seleccionada el sistema seleccionará las capas según el recorrido y generará la imagen.
 
 <H2>GESTIONAR LA MEMORIA</H2>
-![menu_memoria] (ImgManual/menu_memoria.png)
+<img width="673" height="153" alt="menu_memoria" src="https://github.com/user-attachments/assets/aca743eb-6c80-4bc9-a1ee-0057762df446" />
 
 En este apartado se dan las opciones al usuario para gestionar la memoria que está utilizando la aplicación, esto se hace por medio de la herramienta graphviz, la cual genera imagenes en la carpeta de ruta "GeneratorImages/Memory", a continuación se listan las opciones mostradas:
 
