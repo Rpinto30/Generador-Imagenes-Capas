@@ -4,7 +4,7 @@ La aplicación se organizó en diferentes archivos .h de tal manera que cada uno
 <H2>AUTOMATAS</H2>
 Para la carga masiva se utilizaron 3 tipos de automatas diferentes: el automata_cap.h, automata_im.h y automata_usr.h; cada uno fue hecho exclusivamente para leer los archivos de la carpeta data y así, mapear los datos de estos archivos en una LinkedList propia que será explicada más adelante, esto para almacenarlos en memoria dinamica y poder agregar una cantidad indefinida de datos. A pesar que cada uno de los automatas realizan el analisis léxico con ayuda de Regex de la forma que muestra el siguiente diagrama de flujo:
 
-DIAGRAMA_AUTOMATAS
+<img width="408" height="741" alt="DiagramaAutomata drawio" src="https://github.com/user-attachments/assets/5ef538a8-91f1-44fa-87ae-aa20a81ea98b" />
 
 <H2>DOTGENERATOR</H2>
 Se creó un archivo titulado DotGenerator.h encargado de administrar el uso de graphviz para la generación de imagenes, tanto de memoria como los resultados pixelArt. 
@@ -13,7 +13,7 @@ Para el caso de las imagenes pixelArt, se utilizo el mismo flujo, cambiando el a
 
 Para evitar el exceso de archivos y fomentar una mayor limpieza en las salidas del sistema, se optó por eliminar el archivo .dot luego que este haya sido usado por el metodo system(), dejando así solo el resultado de la imagen generada. La clase DotFile como en su mayoria el archivo DotGenerator.h siguen el siguiente diagrama de flujo:
 
-DIAGRAMA DOTGENERATOR
+<img width="373" height="822" alt="dotgenDiagrama drawio" src="https://github.com/user-attachments/assets/79f47085-4a2c-4e24-92c6-a361cb5224b5" />
 
 <H2>STRUCTS Y DEFINITIONS</H2>
 Para almacenar toda la información de la aplicación, se crearon desde 0 las siguientes estructuras de datos:
@@ -27,4 +27,4 @@ Al ser estructuras de datos que se iban a utilizar en multiples lugares, se opt�
 En el archivo definition.h se encuentra la declación ya de estas estructuras con el tipo que le corresponde almacenar, además de la declaración de diversos metodos que son utilizados en el main.cpp para su utilización.
 
 <H2>DIAGRAMA DE FLUJO GENERAL</H2>
-DIAGRAMA GENERAL
+<img width="355" height="871" alt="diagramaGENERAL drawio" src="https://github.com/user-attachments/assets/33a9112e-76e4-4073-804c-4bff2b195ad2" />
