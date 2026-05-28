@@ -66,7 +66,7 @@ void userOptions(){
         cout<<"\t5) Ver imagenes de usuario"<<endl;
         cout<<"\t6) Agregar imagen a usuario"<<endl;
         cout<<"\t7) Eliminar imagen de usuario"<<endl;
-        cout<<"\t-1) Volver"<<endl;
+        cout<<"\t0) Volver"<<endl;
         cout<<"\t> Elige una de las opciones: ";
         cin>>option;
 
@@ -153,7 +153,7 @@ void userOptions(){
                 continue;
             }
         }
-    } while(option != "-1");
+    } while(option != "0");
 }
 
 void imagesOptions(){
@@ -163,7 +163,7 @@ void imagesOptions(){
         cout<<"\t1) Generar por usuario"<<endl;
         cout<<"\t2) Generar por capas"<<endl;
         cout<<"\t3) Generar por recorrido"<<endl;
-        cout<<"\t-1) Volver"<<endl;
+        cout<<"\t0) Volver"<<endl;
         cout<<"\t> Elige una de las opciones: ";
         cin>>option;
 
@@ -184,7 +184,7 @@ void imagesOptions(){
         } else if (option == "3"){
             generateBySearch();
         }
-    } while(option != "-1");
+    } while(option != "0");
 }
 
 void generateDotFile(DotFile* file, bool delete_file, bool debugMessage = true){
@@ -207,7 +207,7 @@ void memoryOptions(){
         cout<<"\t3) Mostrar capa"<<endl;
         cout<<"\t4) Mostrar Imagen y arbol de capas"<<endl;
         cout<<"\t5) Mostrar Arbol de usuarios"<<endl;
-        cout<<"\t-1) Volver"<<endl;
+        cout<<"\t0) Volver"<<endl;
         cout<<"\t> Elige una de las opciones: ";
         cin>>option;
 
@@ -254,7 +254,7 @@ void memoryOptions(){
             generateDotFile(&temp_file, true);
         }
 
-    } while(option != "-1");
+    } while(option != "0");
 }
 
 
@@ -268,14 +268,14 @@ int main()
         cout<<"1) Opciones de usuario"<<endl;
         cout<<"2) Generacion de imagenes"<<endl;
         cout<<"3) Gestionar la memoria"<<endl;
-        cout<<"-1) Salir"<<endl;
+        cout<<"0) Salir"<<endl;
         cout<<"> Elige una de las opciones: ";
         cin>>option;
 
         if (option == "1") userOptions();
         if (option == "2") imagesOptions();
         if (option == "3") memoryOptions();
-    } while(option != "-1");
+    } while(option != "0");
 
     //generateDot(true);
     return 0;
