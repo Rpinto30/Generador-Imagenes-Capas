@@ -831,6 +831,13 @@ public:
         } while (temp != head);
     }
 
+    void delete_id (int id){
+        graph.removeKeyWord("img_"+to_string(id));
+        graph.removeKeyWord("i"+to_string(id));
+        deleteDataById(id);
+        setRankGraphviz();
+    }
+
 };
 
 //Utilizado unicamente para tener la referencia de las imagenes por cada usuario y ahorrar su busqueda en toda la DLL

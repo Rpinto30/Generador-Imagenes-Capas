@@ -17,6 +17,7 @@ using namespace auto_im;
 using namespace auto_usr;
 
 int last_id_user = 1;
+int last_id_image = 1;
 BST<User> bt("Usuarios", "us_", "white");
 BST<Layer_struct> bt_layers("Capas", "lyr_", "\"#FF333340\"");
 ListImages ls("Imagenes", "img_", "\"#7FBA85\"", "lyr_");
@@ -75,7 +76,7 @@ void userOptions(){
             cout<<"\t---------------------------------"<<endl;
             cout<<"\t> Agrega un nombre al usuario: ";
             cin>>name;
-            User* user_ = new User("us_" + to_string(last_id_user));
+            User* user_ = new User("us_" + to_string(++last_id_user));
             user_->nickname = name;
             bt.insert(last_id_user, user_, user_->nickname);
             cout<<"\t! Se ha creado el usuario y agregado al sistema!"<<endl; break;
@@ -257,6 +258,60 @@ void memoryOptions(){
     } while(option != "0");
 }
 
+/*IMAGEN*/
+void imgOptions(){
+    string option;
+    do{
+        cout<<"-------------------------------------------------------------------------"<<endl;
+        cout<<"\t1) Agregar Imagen"<<endl;
+        cout<<"\t2) Ver Imagenes"<<endl;
+        cout<<"\t3) Eliminar Imagen"<<endl;
+        cout<<"\t0) Volver"<<endl;
+        cout<<"\t> Elige una de las opciones: ";
+        cin>>option;
+
+        if (option == "1"){
+            int id = last_id_image++;
+            int id_user;
+            bt.print_preorden("\t", "Usuario");
+            cout<<"\t> Ingresa el ID del usuario que se le agregara la imagen: ";
+            cin>>id_user;
+
+            if (bt.search(id_user) == nullptr) {
+                cout<<"\tx No se encontro ese usuario "<<endl;
+                return;
+            }
+
+            int id_layer;
+            Image* image = new Image(to_string(id));
+            ls.add(id, image);
+            cout<<endl;
+            while (id_layer != 0){
+                bt_layers.print_preorden("\t");
+                cout<<"\t> Ingresa el ID de una capa para la imagen (Ingresa 0 para salir): ";
+                cin>>id_layer;
+                if (image->layers.getIndex(id_layer) == nullptr){
+                    Layer_struct* layer = new Layer_struct(new Layer("l"+ to_string(id_layer)));
+                    bt_layers.insert(id_layer, layer, "");
+                    ls.addLayer(id, bt_layers.search(id_layer)->data);
+                    cout<<"\t! capa añadida! "<<endl;
+                }
+            }
+            bt.search(id_user)->data->list_images.add(id, image, bt.getGraph());
+            cout<<"\t ! Imagen creada correctamente!"<<endl;
+        } else if (option == "2"){
+            ls.print_list("\t");
+        } else if (option == "3"){
+            int id;
+            ls.print_list("\t");
+            cout<<"\t> Ingresa el ID de la imagen a eliminar: ";
+            cin>>id;
+            if(ls.getByID(id) == nullptr) return;
+            ls.delete_id(id);
+        }
+    } while(option != "0");
+}
+
 
 /*MAIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIN*/
 int main()
@@ -268,6 +323,7 @@ int main()
         cout<<"1) Opciones de usuario"<<endl;
         cout<<"2) Generacion de imagenes"<<endl;
         cout<<"3) Gestionar la memoria"<<endl;
+        cout<<"4) Gestionar imagenes"<<endl;
         cout<<"0) Salir"<<endl;
         cout<<"> Elige una de las opciones: ";
         cin>>option;
@@ -275,6 +331,7 @@ int main()
         if (option == "1") userOptions();
         if (option == "2") imagesOptions();
         if (option == "3") memoryOptions();
+        if (option == "4") imgOptions();
     } while(option != "0");
 
     //generateDot(true);
@@ -326,33 +383,24 @@ void genImageByLayer(int id){
 }
 
 
-void imgPreOrden(Entity<Layer_struct>* node, PixelGraph* pixel_generator, int x, int y){
-    if (node->data->layer->getWidth() > x) x = node->data->layer->getWidth();
-    if (node->data->layer->getHeight() > y) y = node->data->layer->getHeight();
-
+void imgPreOrden(Entity<Layer_struct>* node, PixelGraph* pixel_generator){
     cout<<"\tcargando capa..."<<endl;
-    pixel_generator->addToContext(node->data->layer->pixelArt(x,y));
+    pixel_generator->addToContext(node->data->layer->pixelArt());
 
-    if (node->left) imgPreOrden(node->left,pixel_generator, x,y);
-    if (node->right) imgPreOrden(node->right,pixel_generator, x,y);
+    if (node->left) imgPreOrden(node->left,pixel_generator);
+    if (node->right) imgPreOrden(node->right,pixel_generator);
 }
 
-void imgInOrden(Entity<Layer_struct>* node, PixelGraph* pixel_generator, int x, int y){
-    if (node->data->layer->getWidth() > x) x = node->data->layer->getWidth();
-    if (node->data->layer->getHeight() > y) y = node->data->layer->getHeight();
-
-    if (node->left) imgPreOrden(node->left,pixel_generator,x,y);
+void imgInOrden(Entity<Layer_struct>* node, PixelGraph* pixel_generator){
+    if (node->left) imgPreOrden(node->left,pixel_generator);
     cout<<"\tcargando capa..."<<endl;
-    pixel_generator->addToContext(node->data->layer->pixelArt(x,y));
-    if (node->right) imgPreOrden(node->right,pixel_generator,x,y);
+    pixel_generator->addToContext(node->data->layer->pixelArt());
+    if (node->right) imgPreOrden(node->right,pixel_generator);
 }
 
-void imgPostOrden(Entity<Layer_struct>* node, PixelGraph* pixel_generator, int x, int y){
-    if (node->data->layer->getWidth() > x) x = node->data->layer->getWidth();
-    if (node->data->layer->getHeight() > y) y = node->data->layer->getHeight();
-
-    if (node->left) imgPreOrden(node->left,pixel_generator,x,y);
-    if (node->right) imgPreOrden(node->right,pixel_generator,x,y);
+void imgPostOrden(Entity<Layer_struct>* node, PixelGraph* pixel_generator){
+    if (node->left) imgPreOrden(node->left,pixel_generator);
+    if (node->right) imgPreOrden(node->right,pixel_generator);
 
     cout<<"\tcargando capa..."<<endl;
     pixel_generator->addToContext(node->data->layer->pixelArt());
@@ -370,18 +418,17 @@ void generateBySearch(){
     cin>>option;
 
 
-    int maxX = root->data->layer->getWidth(); int maxY = root->data->layer->getHeight();
     if (option == "1"){
         PixelGraph pixel_generator("preorden_pixelArt", "preorden_pixelArt");
-        imgPreOrden(root, &pixel_generator, maxX, maxY);
+        imgPreOrden(root, &pixel_generator);
         pixel_generator.generateNewFiles(true);
     } else if (option == "2"){
         PixelGraph pixel_generator("inorden_pixelArt", "inorden_pixelArt");
-        imgInOrden(root, &pixel_generator, maxX, maxY);
+        imgInOrden(root, &pixel_generator);
         pixel_generator.generateNewFiles(true);
     } else if (option == "3"){
         PixelGraph pixel_generator("postorden_pixelArt", "postorden_pixelArt");
-        imgPostOrden(root, &pixel_generator, maxX, maxY);
+        imgPostOrden(root, &pixel_generator);
         pixel_generator.generateNewFiles(true);
     }
 
@@ -437,7 +484,9 @@ void load_images(){
             for (string& capa : *(bloque.layers)){
                 ls.addLayer(stoi(bloque.id), bt_layers.search(stoi(capa))->data);
             }
+            last_id_image++;
         }
+
     } catch (const exception& e) {
         cerr << "Error: " << e.what() << "\n";
     }

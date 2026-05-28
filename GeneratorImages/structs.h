@@ -198,6 +198,11 @@ class LinkedList{
             insert(new_node);
         }
 
+        void insert_node(T* data){
+            Node<T>* new_node = new Node<T>(&data,false);
+            insert(new_node);
+        }
+
         int size(){
             Node<T>* temp = head;
             int sz = 0;
@@ -517,6 +522,22 @@ class LinkedList{
             node->next = nullptr;
             node->prev = nullptr;
 
+        }
+
+        BiNode<T>* deleteById(int id) {
+            BiNode<T>* node = getByIndex(id);
+            if (node == nullptr) return nullptr;
+            desligateNode(node);
+            return node;
+        }
+
+        T* deleteDataById(int id) {
+            BiNode<T>* node = getByIndex(id);
+            if (node == nullptr) return nullptr;
+            desligateNode(node);
+            T* data = node->data;
+            delete node;
+            return data;
         }
 
         ~DoubleCircleList(){
